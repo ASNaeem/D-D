@@ -1,0 +1,4 @@
+.markdown-rendered td,
+.markdown-rendered th {
+    white-space: nowrap;
+}

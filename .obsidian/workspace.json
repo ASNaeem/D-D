@@ -1,0 +1,237 @@
+{
+  "main": {
+    "id": "5499aa7915cdb59f",
+    "type": "split",
+    "children": [
+      {
+        "id": "bcbbae7497e19f01",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6ffbb13f07188097",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Campaigns/OneShot-26/Character_Sheet.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Character_Sheet"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "64ed90b098810826",
+    "type": "split",
+    "children": [
+      {
+        "id": "b4bca7a67b468fd0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "66b39db7506ee0d1",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "7fb9ef958f0acc4f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "e6908b68cfa9d968",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "c2eda7e64e2bddef",
+    "type": "split",
+    "children": [
+      {
+        "id": "f4eb9bca8b862c34",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ca08fbd6435e0e17",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Classes/Paladin/Paladin - D&D 5e (2024).md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Paladin - D&D 5e (2024)"
+            }
+          },
+          {
+            "id": "72e830f792584b9e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Classes/Paladin/Paladin - D&D 5e (2024).md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Paladin - D&D 5e (2024)"
+            }
+          },
+          {
+            "id": "f3605df45e038393",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "eacd8eda13124c18",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "9c50c5b638d5d707",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Campaigns/OneShot-26/Character_Sheet.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Character_Sheet"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 319.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
+      "table-formatter:Format tables in active file": false
+    }
+  },
+  "active": "6ffbb13f07188097",
+  "lastOpenFiles": [
+    "LaTeX_Character_Sheet/latex_page-2.png",
+    "LaTeX_Character_Sheet/latex_page-1.png",
+    "Campaigns/OneShot-26/page-10.png",
+    "Campaigns/OneShot-26/page-09.png",
+    "Campaigns/OneShot-26/page-08.png",
+    "Campaigns/OneShot-26/page-07.png",
+    "Campaigns/OneShot-26/page-06.png",
+    "Campaigns/OneShot-26/page-05.png",
+    "Campaigns/OneShot-26/page-04.png",
+    "Campaigns/OneShot-26/page-03.png",
+    "Campaigns/OneShot-26/page-02.png",
+    "Campaigns/OneShot-26/Character_Sheet.html",
+    "Campaigns/OneShot-26/Character_Sheet.pdf",
+    "Campaigns/OneShot-26/Character_Sheet.md",
+    "LaTeX_Character_Sheet/character_sheet.pdf",
+    "LaTeX_Character_Sheet/character_sheet.out",
+    "LaTeX_Character_Sheet/official_2024_sheet.pdf",
+    "LaTeX_Character_Sheet/preview.html",
+    "LaTeX_Character_Sheet/character_sheet.aux",
+    "LaTeX_Character_Sheet/character_sheet.log",
+    "LaTeX_Character_Sheet/README.md",
+    "LaTeX_Character_Sheet/character_sheet.tex",
+    "LaTeX_Character_Sheet/dnd5e_sheet.sty",
+    "Classes/Paladin/Paladin - D&D 5e (2024).md",
+    "Campaigns/OneShot-26/Journey_Notes.md",
+    "Spells/Spell_Locate Object.md",
+    "Spells/Spell_Lesser Restoration.md",
+    "Spells/Spell_Wrathful Smite.md",
+    "Spells/Spell_Thunderous Smite.md",
+    "Spells/Spell_Bless.md",
+    "Spells/Spell_Searing Smite.md",
+    "Spells/Spell_Cure Wounds.md",
+    "Spells/Spell_Heroism.md",
+    "Spells/Spell_Find Steed.md",
+    "Spells/Spell_Zone of Truth.md",
+    "Spells/Spell_Aid.md",
+    "Spells/Spell_Shield of Faith.md",
+    "Spells/Spell_Protection from Evil and Good.md",
+    "Spells/Spell_Divine Smite.md",
+    "Equipment/Equipment_Plate Armor.md",
+    "Feats/Feat_Defense.md",
+    "MagicItems/MagicItem_Moon Touched Sword.md",
+    "MagicItems/MagicItem_Cloak of Protection.md",
+    "Feats/Feat_War Caster.md",
+    "Equipment/Equipment_Holy Symbol.md",
+    "Equipment/Equipment_Traveler's Clothes.md"
+  ]
+}

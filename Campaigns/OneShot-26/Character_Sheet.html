@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Valerius</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap');
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #2D3748;
+    line-height: 1.6;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 50px;
+    font-size: 14px;
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  h1, h2, h3, h4 {
+    font-family: 'Cinzel', serif;
+    color: #58170d;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    border-bottom: 2px solid #58170d;
+    padding-bottom: 5px;
+  }
+  
+  h1 {
+    font-size: 28px;
+    text-align: center;
+    border-bottom: 3px double #58170d;
+    padding-bottom: 10px;
+    margin-top: 0;
+  }
+  
+  h2 {
+    font-size: 20px;
+    margin-top: 2em;
+    border-bottom: 2px solid #58170d;
+  }
+  
+  h3 {
+    font-size: 16px;
+    border-bottom: 1px solid #c9a054;
+    color: #8c1d1d;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 13px;
+  }
+  
+  th, td {
+    border: 1px solid #E2E8F0;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #58170d;
+    color: white;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #F8FAFC;
+  }
+  
+  tr:hover {
+    background-color: #EDF2F7;
+  }
+  
+  code {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    background-color: #EDF2F7;
+    color: #c53030;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  hr {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(to right, rgba(88, 23, 13, 0), rgba(88, 23, 13, 0.75), rgba(88, 23, 13, 0));
+    margin: 35px 0;
+  }
+  
+  a {
+    color: #8c1d1d;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  ul {
+    padding-left: 20px;
+  }
+  
+  li {
+    margin-bottom: 5px;
+  }
+
+  @page {
+    size: letter;
+    margin: 15mm;
+  }
+
+  @media print {
+    body {
+      padding: 0;
+      margin: 0;
+      font-size: 12px;
+      background-color: white;
+    }
+    
+    .container {
+      max-width: 100%;
+    }
+    
+    h1, h2, h3, h4 {
+      page-break-after: avoid;
+    }
+    
+    tr, blockquote, pre, .avoid-break {
+      page-break-inside: avoid;
+    }
+    
+    hr {
+      page-break-before: avoid !important;
+      page-break-after: avoid !important;
+      break-before: avoid !important;
+      break-after: avoid !important;
+      margin: 20px 0 !important;
+    }
+    
+    a {
+      color: #8c1d1d;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1 id="dd-5e-2024-character-sheet">⚔️ D&amp;D 5e (2024) Character Sheet</h1>
+<p><a id="character-info"></a></p>
+<h2 id="character-information">Character Information</h2>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Character Name</strong></td>
+<td><code>Valerius</code></td>
+</tr>
+<tr>
+<td><strong>Species</strong></td>
+<td>Satyr (Fey)</td>
+</tr>
+<tr>
+<td><strong>Class &amp; Level</strong></td>
+<td>Paladin <span id="paladin-level"><code>6</code></span> (Oath of Devotion) (Total Level: <span id="total-level"><code>6</code></span>)</td>
+</tr>
+<tr>
+<td><strong>Background</strong></td>
+<td>Planar Envoy</td>
+</tr>
+<tr>
+<td><strong>Alignment</strong></td>
+<td><code>Chaotic Good</code></td>
+</tr>
+<tr>
+<td><strong>Proficiency Bonus</strong></td>
+<td><span id="prof-bonus">+<code>3</code></span></td>
+</tr>
+<tr>
+<td><strong>Experience Points</strong></td>
+<td><code>14000</code> / <code>23000</code></td>
+</tr>
+<tr>
+<td><strong>Hit Die</strong></td>
+<td><span id="hit-die-type"><code>d10</code></span></td>
+</tr>
+<tr>
+<td><strong>Base HP (Rolled)</strong></td>
+<td><span id="base-hp-formula">10 (base max) + 3 + 5 + 4 + 7 + 10</span> = <strong><span id="base-hp-total"><code>39</code></span></strong></td>
+</tr>
+<tr>
+<td><strong>Base Stats (Rolled)</strong></td>
+<td><strong>STR:</strong> <span id="base-str">17</span>, <strong>DEX:</strong> <span id="base-dex">12</span>, <strong>CON:</strong> <span id="base-con">14</span>, <strong>INT:</strong> <span id="base-int">11</span>, <strong>WIS:</strong> <span id="base-wis">13</span>, <strong>CHA:</strong> <span id="base-cha">15</span></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><a id="ability-scores"></a></p>
+<h2 id="ability-scores-saving-throws">📊 Ability Scores &amp; Saving Throws</h2>
+<table>
+<thead>
+<tr>
+<th>Ability</th>
+<th>Score</th>
+<th>Mod</th>
+<th>Save</th>
+<th>Skills</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>STR</strong> Strength</td>
+<td><code>17</code> + <code>1</code> = <strong><code>18</code></strong></td>
+<td><span id="str-mod"><strong>+<code>4</code></strong></span></td>
+<td>+<code>4</code> + <code>4</code> (Aura) + <code>1</code> (Cloak) = <strong>+<code>9</code></strong></td>
+<td>☑ Athletics (+<code>4</code> + <code>3</code> = +<code>7</code>)</td>
+</tr>
+<tr>
+<td><strong>DEX</strong> Dexterity</td>
+<td><code>12</code> = <strong><code>12</code></strong></td>
+<td><span id="dex-mod"><strong>+<code>1</code></strong></span></td>
+<td>+<code>1</code> + <code>4</code> (Aura) + <code>1</code> (Cloak) = <strong>+<code>6</code></strong></td>
+<td>☐ Acrobatics (+<code>1</code>) <br> ☐ Sleight of Hand (+<code>1</code>) <br> ☐ Stealth (+<code>1</code>)*</td>
+</tr>
+<tr>
+<td><strong>CON</strong> Constitution</td>
+<td><code>14</code> = <strong><code>14</code></strong></td>
+<td><span id="con-mod"><strong>+<code>2</code></strong></span></td>
+<td>+<code>2</code> + <code>4</code> (Aura) + <code>1</code> (Cloak) = <strong>+<code>7</code></strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>INT</strong> Intelligence</td>
+<td><code>11</code> = <strong><code>11</code></strong></td>
+<td><span id="int-mod"><strong>+<code>0</code></strong></span></td>
+<td>+<code>0</code> + <code>4</code> (Aura) + <code>1</code> (Cloak) = <strong>+<code>5</code></strong></td>
+<td>☐ Arcana (+<code>0</code>) <br> ☐ History (+<code>0</code>) <br> ☐ Investigation (+<code>0</code>) <br> ☐ Nature (+<code>0</code>) <br> ☑ Religion (+<code>0</code> + <code>3</code> = +<code>3</code>)</td>
+</tr>
+<tr>
+<td><strong>WIS</strong> Wisdom</td>
+<td><code>13</code> = <strong><code>13</code></strong></td>
+<td><span id="wis-mod"><strong>+<code>1</code></strong></span></td>
+<td>+<code>1</code> + <code>3</code> (Prof) + <code>4</code> (Aura) + <code>1</code> (Cloak) = <strong>+<code>9</code></strong></td>
+<td>☑ Insight (+<code>1</code> + <code>3</code> = +<code>4</code>) <br> ☐ Animal Handling (+<code>1</code>) <br> ☐ Medicine (+<code>1</code>) <br> ☐ Perception (+<code>1</code>) <br> ☐ Survival (+<code>1</code>)</td>
+</tr>
+<tr>
+<td><strong>CHA</strong> Charisma</td>
+<td><code>15</code> + 2 + 1 = <strong><code>18</code></strong></td>
+<td><span id="cha-mod"><strong>+<code>4</code></strong></span></td>
+<td>+<code>4</code> + <code>3</code> (Prof) + <code>4</code> (Aura) + <code>1</code> (Cloak) = <strong>+<code>12</code></strong></td>
+<td>☑ Performance (+<code>4</code> + <code>3</code> = +<code>7</code>) <br> ☑ Persuasion (+<code>4</code> + <code>3</code> = +<code>7</code>) <br> ☐ Deception (+<code>4</code>) <br> ☑ Intimidation (+<code>4</code> + <code>3</code> = +<code>7</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><em>* Stealth rolls are made with Disadvantage due to wearing Plate Armor.</em></p>
+<h3 id="passive-skills">🧠 Passive Skills</h3>
+<ul>
+<li><strong>Passive Perception:</strong> 10 + <code>1</code> = <strong><code>11</code></strong></li>
+<li><strong>Passive Insight:</strong> 10 + <code>4</code> (Insight Proficient) = <strong><code>14</code></strong></li>
+<li><strong>Passive Investigation:</strong> 10 + <code>0</code> = <strong><code>10</code></strong></li>
+</ul>
+<hr />
+<p><a id="combat-stats"></a></p>
+<h2 id="combat-stats">🛡️ Combat Stats</h2>
+<table>
+<thead>
+<tr>
+<th>Stat</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Armor Class (AC)</strong></td>
+<td><strong><code>22</code></strong></td>
+<td>Plate (18) + <a href="#combat-stats">Shield (2)</a> + Cloak (1) + <a href="#paladin-features">Defense Style (1)</a> = <strong>22</strong></td>
+</tr>
+<tr>
+<td><strong>Initiative</strong></td>
+<td><strong>+<code>4</code></strong></td>
+<td><a href="#dex-mod">Dex Modifier (+1)</a> + <a href="#prof-bonus">Proficiency Bonus (+3)</a> (<a href="#species-traits-feats">Alert Feat</a>)</td>
+</tr>
+<tr>
+<td><strong>Speed</strong></td>
+<td><strong>35 ft.</strong></td>
+<td>Base walking speed</td>
+</tr>
+<tr>
+<td><strong>Hit Points (Max)</strong></td>
+<td><strong><code>51</code></strong></td>
+<td><a href="#base-hp-total">Base HP (39)</a> + <a href="#paladin-level">Paladin Level (6)</a> × <a href="#con-mod">Con modifier (+2)</a> = <strong>51</strong></td>
+</tr>
+<tr>
+<td><strong>Current Hit Points</strong></td>
+<td><code>51</code> / <code>51</code></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Temp Hit Points</strong></td>
+<td><code>0</code></td>
+<td>Temporary hit points</td>
+</tr>
+<tr>
+<td><strong>Hit Dice</strong></td>
+<td><strong><code>6</code><a href="#hit-die-type">d10</a></strong></td>
+<td>Remaining: <code>☑ ☑ ☑ ☑ ☑ ☑</code> (d10 per <a href="#paladin-level">Paladin Level</a>)</td>
+</tr>
+<tr>
+<td><strong>Death Saves</strong></td>
+<td>—</td>
+<td>Successes: <code>☐ ☐ ☐</code> <br> Failures: <code>☐ ☐ ☐</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><a id="weapons-attacks"></a></p>
+<h2 id="weapons-attacks">⚔️ Weapons &amp; Attacks</h2>
+<table>
+<thead>
+<tr>
+<th>Weapon / Attack</th>
+<th>Attack Bonus</th>
+<th>Damage</th>
+<th>Damage Type / Properties</th>
+<th>Mastery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Moon-Touched Longsword</strong> (One-Handed)</td>
+<td>+<strong><code>7</code></strong></td>
+<td><strong>1d8 + <code>4</code></strong></td>
+<td>Slashing (Magical, Moon-Touched)</td>
+<td><strong>Sap</strong></td>
+</tr>
+<tr>
+<td><strong>Ram (Unarmed Strike)</strong></td>
+<td>+<strong><code>7</code></strong></td>
+<td><strong>1d6 + <code>4</code></strong></td>
+<td>Bludgeoning (Satyr Species trait)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Javelin</strong> (Range 30/120)</td>
+<td>+<strong><code>7</code></strong></td>
+<td><strong>1d6 + <code>4</code></strong></td>
+<td>Piercing (Thrown)</td>
+<td><strong>Slow</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Note: With </em><em>Sacred Weapon</em><em> active, add your Charisma modifier to attack rolls with your melee weapon (Total: +</em><em><code>11</code></em><em> to hit).</em></p>
+<hr />
+<p><a id="combat-actions"></a></p>
+<h2 id="combat-turn-actions-dd-2024-cheat-sheet">🔄 Combat Turn Actions (D&amp;D 2024 Cheat Sheet)</h2>
+<p>On your turn in combat, you can take <strong>one Action</strong>, <strong>one Bonus Action</strong> (if available), <strong>move up to your Speed</strong>, and perform minor interactions. You can also take <strong>one Reaction</strong> per round in response to triggers.</p>
+<h3 id="actions">🎬 Actions</h3>
+<p>You can perform one of the following Actions on your turn:</p>
+<ul>
+<li><strong>Attack:</strong> Use a weapon to make a melee or ranged attack. You can attack twice instead of once when you take this action (Extra Attack).<ul>
+<li><a href="#weapons-attacks">Moon-Touched Longsword Melee Attack</a>: <strong>+7 to hit</strong>, <strong>1d8 + 4 slashing</strong> damage. Applies <a href="#paladin-features">Sap</a> mastery (target has Disadvantage on its next attack).</li>
+<li><a href="#weapons-attacks">Javelin Ranged Attack</a> (Range 30/120): <strong>+7 to hit</strong>, <strong>1d6 + 4 piercing</strong> damage. Applies <a href="#paladin-features">Slow</a> mastery (target speed reduced by 10 ft).</li>
+<li><a href="#weapons-attacks">Ram Melee Attack</a>: <strong>+7 to hit</strong>, <strong>1d6 + 4 bludgeoning</strong> damage.</li>
+</ul>
+</li>
+<li><strong>Magic (Cast a Spell):</strong> Cast a prepared spell that has a casting time of 1 Action.<ul>
+<li>Protection from Evil and Good: Concentration up to 10 min.</li>
+<li>Heroism: Concentration up to 1 min.</li>
+<li>Cure Wounds: Heal a creature for <strong>2d8 + <code>4</code> HP</strong>.</li>
+</ul>
+</li>
+<li><strong>Turn the Unholy (<a href="#channel-divinity">Channel Divinity</a>):</strong> Present your Holy Symbol. Each Fiend or Undead within 30 feet must make a Wisdom Saving Throw (<a href="#spellcasting-divinity">DC 15</a>) or be Turned for 1 minute.</li>
+<li><strong>Abjure Foes (<a href="#channel-divinity">Channel Divinity</a>):</strong> Present Spellcasting Focus. Choose up to 4 creatures within 60 feet. Each must make a Wisdom Saving Throw (<a href="#spellcasting-divinity">DC 15</a>) or be Frightened (speed 0) for 1 minute (speed halved on save).</li>
+<li><strong>Sacred Weapon (<a href="#channel-divinity">Channel Divinity</a>):</strong> Imbue your melee weapon with positive energy (can also be done as part of the Attack action).</li>
+<li><strong>Dash:</strong> Gain extra movement equal to your speed (35 feet) for the current turn.</li>
+<li><strong>Disengage:</strong> Prevents Opportunity Attacks from moving away from enemies for the rest of the turn.</li>
+<li><strong>Dodge:</strong> Attack rolls against you have Disadvantage, and you make Dexterity saving throws with Advantage.</li>
+<li><strong>Help:</strong> Give an ally Advantage on their next ability check or attack roll.</li>
+<li><strong>Hide:</strong> Make a Dexterity (Stealth) check (with Disadvantage due to Plate Armor) to become hidden.</li>
+<li><strong>Ready:</strong> Set a trigger to perform a specific action as a Reaction later in the round.</li>
+<li><strong>Search:</strong> Search for something using Wisdom (Perception) or Intelligence (Investigation).</li>
+<li><strong>Study:</strong> Recall knowledge using an Intelligence-based skill (Religion, History, etc.).</li>
+<li><strong>Influence:</strong> Attempt to influence creatures using Charisma-based skills (Persuasion, Performance, etc.).</li>
+<li><strong>Use an Object:</strong> Use an item or interact with a second object.</li>
+</ul>
+<h3 id="bonus-actions">⚡ Bonus Actions</h3>
+<p>You can take a Bonus Action only when a special ability or spell specifies that you can do so. You can take only one Bonus Action on your turn:</p>
+<ul>
+<li><strong>Lay on Hands:</strong> Touch a creature and restore HP or cure the Poisoned condition. See <a href="#paladin-features">Lay on Hands</a>.</li>
+<li><strong>Divine Sense (<a href="#channel-divinity">Channel Divinity</a>):</strong> Detect celestials, fiends, and undead within 60 feet for 10 minutes.</li>
+<li><strong>Sacred Weapon (<a href="#channel-divinity">Channel Divinity</a>):</strong> Imbue your melee weapon with positive energy for 10 minutes.</li>
+<li><strong>Divine Smite:</strong> Cast Divine Smite (casting time: 1 Bonus Action) immediately after hitting a creature with a melee weapon or unarmed strike to deal extra radiant damage.</li>
+<li><strong>Spellcasting:</strong> Cast a prepared spell that has a casting time of 1 Bonus Action:<ul>
+<li>Shield of Faith: Concentration up to 10 minutes, +2 to AC.</li>
+</ul>
+</li>
+</ul>
+<h3 id="reactions">↩️ Reactions</h3>
+<p>You can take one Reaction per round, inside or outside your turn, in response to a specific trigger:</p>
+<ul>
+<li><strong>Opportunity Attack:</strong> Make a melee weapon attack against a hostile creature that moves out of your reach.</li>
+<li><strong>Reactive Spell (<a href="#species-traits-feats">War Caster Feat</a>):</strong> Cast a spell as a Reaction instead of making an Opportunity Attack (1 Action cast time, targets only that creature).</li>
+<li><strong>Readied Action:</strong> Execute the action you prepared with the <em>Ready</em> action on your turn.</li>
+</ul>
+<h3 id="movement-other-activities">🏃 Movement &amp; Other Activities</h3>
+<p>These can be done in tandem with your movement and actions:</p>
+<ul>
+<li><strong>Move:</strong> Travel up to your Speed (35 feet), which can be broken up before, during, and after actions.</li>
+<li><strong>Mirthful Leaps (<a href="#species-traits-feats">Satyr Traits</a>):</strong> Roll a <code>d8</code> and add the result to your jump distance.</li>
+<li><strong>Interact with an Object:</strong> Draw or sheathe a weapon, open a door, pick up an item (one free interaction per turn; additional interactions require the <em>Use an Object</em> action).</li>
+</ul>
+<hr />
+<p><a id="proficiencies-languages"></a></p>
+<h2 id="proficiencies-languages">🎒 Proficiencies &amp; Languages</h2>
+<ul>
+<li><strong>Armor:</strong> Light Armor, Medium Armor, Heavy Armor, Shields</li>
+<li><strong>Weapons:</strong> Simple Weapons, Martial Weapons</li>
+<li><strong>Tools:</strong> Pan Flute (Species), Gaming Set or Musical Instrument of choice (Background)</li>
+<li><strong>Languages:</strong> Common, Sylvan (Species), Infernal or Abyssal (Background)</li>
+</ul>
+<hr />
+<p><a id="species-traits-feats"></a></p>
+<h2 id="species-traits-feats">🌟 Species Traits &amp; Feats</h2>
+<h3 id="satyr-species-traits">Satyr Species Traits</h3>
+<ul>
+<li><strong>Creature Type:</strong> Fey (not Humanoid; immune to spells like <em>Hold Person</em>).</li>
+<li><strong>Magic Resistance:</strong> You have Advantage on saving throws against spells.</li>
+<li><strong>Mirthful Leaps:</strong> When you make a long or high jump, roll a <code>d8</code> and add the result to the jump distance (costs movement as normal).</li>
+<li><strong>Reveler:</strong> Proficiency in Performance and Persuasion skills, and Pan Flute.</li>
+</ul>
+<h3 id="origin-feat-alert-background">Origin Feat: <a href="#species-traits-feats">Alert</a> (Background)</h3>
+<ul>
+<li><strong>Initiative Proficiency:</strong> When you roll Initiative, you can add your Proficiency Bonus (+<code>3</code>) to the roll.</li>
+<li><strong>Initiative Swap:</strong> Immediately after you roll Initiative, you can swap your Initiative with the Initiative of one willing ally in the same combat. You can't make this swap if you or the ally has the Incapacitated condition.</li>
+</ul>
+<h3 id="level-4-feat-war-caster">Level 4 Feat: <a href="#species-traits-feats">War Caster</a></h3>
+<ul>
+<li><strong>Ability Score Increase:</strong> Increased Charisma by +1 (included in Charisma score).</li>
+<li><strong>Concentration:</strong> You have Advantage on Constitution saving throws that you make to maintain Concentration.</li>
+<li><strong>Reactive Spell:</strong> When a creature provokes an Opportunity Attack from you, you can take a Reaction to cast a spell at the creature instead of making an Opportunity Attack (1 Action cast time, targets only that creature).</li>
+<li><strong>Somatic Components:</strong> You can perform Somatic components of spells even with your Moon-Touched Longsword and Shield in hand.</li>
+</ul>
+<p><a id="paladin-features"></a></p>
+<h2 id="paladin-class-journey-features">🛡️ Paladin Class Journey &amp; Features</h2>
+<h3 id="level-1">⚖️ Level 1</h3>
+<ul>
+<li><strong><a href="#paladin-features">Lay on Hands</a></strong>: Pool of <strong><code>30</code> HP</strong> (5 × Paladin Level <code>6</code>). Restore HP or cure Poison.</li>
+<li><strong><a href="#spellcasting-divinity">Spellcasting</a></strong>: Spell Save DC <code>15</code>, Spell Attack +<code>7</code>.</li>
+<li><strong><a href="#paladin-features">Weapon Mastery</a></strong>: Longsword (Sap), Javelin (Slow).</li>
+</ul>
+<h3 id="level-2">⚔️ Level 2</h3>
+<ul>
+<li><strong><a href="#paladin-features">Fighting Style</a> (Choice)</strong>: Chosen <strong><a href="#paladin-features">Defense</a></strong> (+1 AC while wearing armor).</li>
+<li><strong><a href="#paladin-features">Paladin's Smite</a></strong>: <em>Divine Smite</em> always prepared, 1 free cast per day.</li>
+</ul>
+<h3 id="level-3">☀️ Level 3</h3>
+<ul>
+<li><strong><a href="#channel-divinity">Channel Divinity</a></strong>: 2 uses per short/long rest.</li>
+<li><strong><a href="#paladin-features">Paladin Subclass</a> (Choice)</strong>: Chosen <strong><a href="#paladin-features">Oath of Devotion</a></strong> subclass.</li>
+</ul>
+<h3 id="level-4">🌟 Level 4</h3>
+<ul>
+<li><strong><a href="#paladin-features">Feat / ASI Choice</a></strong>: Chosen <strong><a href="#species-traits-feats">War Caster</a></strong> feat (+1 Charisma).</li>
+</ul>
+<h3 id="level-5">⚡ Level 5</h3>
+<ul>
+<li><strong><a href="#paladin-features">Extra Attack</a></strong>: Attack twice instead of once with the Attack action.</li>
+<li><strong><a href="#paladin-features">Faithful Steed</a></strong>: <em>Find Steed</em> always prepared, 1 free cast per day.</li>
+</ul>
+<h3 id="level-6">🛡️ Level 6</h3>
+<ul>
+<li><strong><a href="#paladin-features">Aura of Protection</a></strong>: +4 to saving throws for you and friendly creatures within 10 feet.</li>
+</ul>
+<hr />
+<p><a id="spellcasting-divinity"></a></p>
+<h2 id="spellcasting-channel-divinity">✨ Spellcasting &amp; Channel Divinity</h2>
+<table>
+<thead>
+<tr>
+<th>Spell Save DC</th>
+<th>Spell Attack Bonus</th>
+<th>Spell Slots</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>15</code></strong> (8 + <code>3</code> PB + <code>4</code> CHA)</td>
+<td><strong>+<code>7</code></strong> (<code>3</code> PB + <code>4</code> CHA)</td>
+<td>1st Level: <code>☑☑☑☑</code> (4 Slots) <br> 2nd Level: <code>☑☑</code> (2 Slots)</td>
+</tr>
+</tbody>
+</table>
+<p><a id="channel-divinity"></a></p>
+<h3 id="channel-divinity">Channel Divinity</h3>
+<p>You have <strong>2 uses</strong> of Channel Divinity per Short or Long Rest. Regain 1 expended use on a Short Rest, and all on a Long Rest.</p>
+<ul>
+<li><strong>Divine Sense</strong> <em>(Bonus Action)</em>: Detect Celestials, Fiends, and Undead within 60 feet for 10 minutes.</li>
+<li><strong>Sacred Weapon</strong> <em>(Attack Action / Bonus Action)</em>: Imbue your melee weapon with positive energy for 10 minutes. Add Charisma modifier (+<code>4</code>) to attack rolls (min +1). Weapon deals normal or Radiant damage and emits Bright Light in 20-foot radius. Ends early if dropped.</li>
+<li><strong>Turn the Unholy</strong> <em>(Magic Action)</em>: Present your Holy Symbol. Each Fiend or Undead within 30 feet must succeed on a Wisdom saving throw (DC <code>15</code>) or be Turned for 1 minute or until it takes damage.</li>
+<li><strong>Abjure Foes</strong> <em>(Magic Action)</em>: Present your Spellcasting Focus and target a number of creatures within 60 feet equal to your Charisma modifier (+<code>4</code>) (min 1). Each target must make a Wisdom saving throw (DC <code>15</code>). On a failed save, a target is Frightened for 1 minute or until it takes damage; its speed is 0. On a successful save, its speed is halved for 1 minute or until it takes damage.</li>
+</ul>
+<p><a id="prepared-spells"></a></p>
+<h3 id="prepared-spells-9-prepared-oath-spells-paladin-features">Prepared Spells (9 Prepared + Oath Spells + Paladin Features)</h3>
+<h4 id="paladins-smite">Paladin's Smite</h4>
+<table>
+<thead>
+<tr>
+<th>Spell</th>
+<th>Level</th>
+<th>Casting Time</th>
+<th>Concentration</th>
+<th>Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Divine Smite</td>
+<td>1</td>
+<td>Bonus Action</td>
+<td>No</td>
+<td>Instantaneous</td>
+</tr>
+</tbody>
+</table>
+<h4 id="faithful-steed">Faithful Steed</h4>
+<table>
+<thead>
+<tr>
+<th>Spell</th>
+<th>Level</th>
+<th>Casting Time</th>
+<th>Concentration</th>
+<th>Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Find Steed</td>
+<td>2</td>
+<td>Action</td>
+<td>No</td>
+<td>Instantaneous</td>
+</tr>
+</tbody>
+</table>
+<h4 id="oath-spells">Oath Spells</h4>
+<table>
+<thead>
+<tr>
+<th>Spell</th>
+<th>Level</th>
+<th>Casting Time</th>
+<th>Concentration</th>
+<th>Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Protection from Evil and Good</td>
+<td>1</td>
+<td>Action</td>
+<td>⚠️ Yes</td>
+<td>Concentration up to 10 minutes</td>
+</tr>
+<tr>
+<td>Shield of Faith</td>
+<td>1</td>
+<td>Bonus Action</td>
+<td>⚠️ Yes</td>
+<td>Concentration, up to 10 minutes</td>
+</tr>
+<tr>
+<td>Aid</td>
+<td>2</td>
+<td>Action</td>
+<td>No</td>
+<td>8 hours</td>
+</tr>
+<tr>
+<td>Zone of Truth</td>
+<td>2</td>
+<td>Action</td>
+<td>No</td>
+<td>10 minutes</td>
+</tr>
+</tbody>
+</table>
+<h4 id="paladin-spellcasting-prepared">Paladin Spellcasting (Prepared)</h4>
+<table>
+<thead>
+<tr>
+<th>Spell</th>
+<th>Level</th>
+<th>Casting Time</th>
+<th>Concentration</th>
+<th>Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bless</td>
+<td>1</td>
+<td>Action</td>
+<td>⚠️ Yes</td>
+<td>Concentration, up to 1 minute</td>
+</tr>
+<tr>
+<td>Cure Wounds</td>
+<td>1</td>
+<td>Action</td>
+<td>No</td>
+<td>Instantaneous</td>
+</tr>
+<tr>
+<td>Heroism</td>
+<td>1</td>
+<td>Action</td>
+<td>⚠️ Yes</td>
+<td>Concentration, up to 1 minute</td>
+</tr>
+<tr>
+<td>Thunderous Smite</td>
+<td>1</td>
+<td>Bonus Action</td>
+<td>No</td>
+<td>Instantaneous</td>
+</tr>
+<tr>
+<td>Wrathful Smite</td>
+<td>1</td>
+<td>Bonus Action</td>
+<td>No</td>
+<td>1 minute</td>
+</tr>
+<tr>
+<td>Lesser Restoration</td>
+<td>2</td>
+<td>Bonus Action</td>
+<td>No</td>
+<td>Instantaneous</td>
+</tr>
+<tr>
+<td>Locate Object</td>
+<td>2</td>
+<td>Action</td>
+<td>⚠️ Yes</td>
+<td>Concentration, up to 10 minutes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><a id="equipment-currency"></a></p>
+<h2 id="equipment-currency">🎒 Equipment &amp; Currency</h2>
+<h3 id="equipped-slots">🛡️ Equipped Slots</h3>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Equipped Item</th>
+<th>Details / Properties</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Armor</strong></td>
+<td>Plate Armor</td>
+<td>AC 18, Stealth Disadvantage, Str 15 req.</td>
+</tr>
+<tr>
+<td><strong>Main Hand</strong></td>
+<td>Moon-Touched Longsword</td>
+<td>Magic Weapon, 1d8+4 slashing (Versatile 1d10), Sap, Sheds Light</td>
+</tr>
+<tr>
+<td><strong>Off-Hand</strong></td>
+<td><a href="#combat-stats">Shield</a></td>
+<td>AC +2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tuned-magic-items-status">🔮 Tuned Magic Items Status</h3>
+<ul>
+<li><strong>Status:</strong> <code>1 / 3</code> active slots used</li>
+<li><strong>Tuned Items:</strong><ul>
+<li><code>1.</code> Cloak of Protection (+1 to AC and all saving throws)</li>
+</ul>
+</li>
+</ul>
+<h3 id="carrying-inventory">🎒 Carrying Inventory</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Qty</th>
+<th>Weight</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#weapons-attacks">Javelin</a></td>
+<td>5</td>
+<td>2 lb. each</td>
+<td>Simple Thrown Weapon, Slow Mastery</td>
+</tr>
+<tr>
+<td>Holy Symbol</td>
+<td>1</td>
+<td>1 lb.</td>
+<td>Spellcasting Focus</td>
+</tr>
+<tr>
+<td>Pan Flute</td>
+<td>1</td>
+<td>2 lb.</td>
+<td>Musical Instrument (Species tool)</td>
+</tr>
+<tr>
+<td>Explorer's Pack</td>
+<td>1</td>
+<td>19 lb.</td>
+<td>Backpack and adventuring supplies</td>
+</tr>
+<tr>
+<td>Gaming Set / Instrument</td>
+<td>1</td>
+<td>—</td>
+<td>Background tool of choice</td>
+</tr>
+<tr>
+<td>Scroll Case</td>
+<td>1</td>
+<td>1 lb.</td>
+<td>Letters of introduction from planar power</td>
+</tr>
+<tr>
+<td>Cosmic Token</td>
+<td>1</td>
+<td>—</td>
+<td>Planar keepsake (Background)</td>
+</tr>
+<tr>
+<td>Traveler's Clothes</td>
+<td>1</td>
+<td>4 lb.</td>
+<td>Wearable clothes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="currency">🪙 Currency</h3>
+<ul>
+<li><strong>Copper (CP):</strong> 0</li>
+<li><strong>Silver (SP):</strong> 0</li>
+<li><strong>Electrum (EP):</strong> 0</li>
+<li><strong>Gold (GP):</strong> 15</li>
+<li><strong>Platinum (PP):</strong> 0</li>
+</ul>
+<hr />
+<h2 id="character-backstory-notes">📜 Character Backstory &amp; Notes</h2>
+<h3 id="appearance">🎭 Appearance</h3>
+<p>A dashing Satyr with sleek ram horns, clad in polished plate armor adorned with small silver ivy leaf emblems. He possesses a warm, charming smile and carries a well-crafted wooden pan flute at his belt. His shield is painted with a silver sunburst surrounded by grapevines, symbolizing both his devotion and his fey heritage.</p>
+<h3 id="personality">🌟 Personality</h3>
+<p>Valiant, gregarious, and deeply joyful. Valerius believes that justice should be upheld with a song and a smile, and that protecting the weak is the highest and most noble form of performance. He is quick to offer a tune to cheer up a weary traveler, but just as quick to draw his moon-touched longsword if evildoers threaten the innocent.</p>
+<h3 id="allies-organizations">🤝 Allies &amp; Organizations</h3>
+<ul>
+<li><strong>The Gilded Ivy Troupe:</strong> A traveling band of bards, actors, and acrobats who took Valerius in when he first arrived in the Material Plane. They remain close friends, and he frequently performs with them when their paths cross.</li>
+<li><strong>The Order of the Gilded Leaf:</strong> A small, localized order of Paladins and Rangers dedicated to protecting border towns and trade roads from fey incursions and monstrous threats. They value both chivalry and harmony with nature.</li>
+</ul>
+<h3 id="backstory-planar-envoy">📖 Backstory (Planar Envoy)</h3>
+<p>Born in the vibrant, shifting groves of the Feywild, Valerius was chosen early by the Court of the Archfey to serve as a diplomat and messenger—a <strong>Planar Envoy</strong>. Armed with letters of introduction and a glowing cosmic token, he traveled the planes, negotiating borders between the Seelie Court and various planar lords, walking the portals of Sigil, and speaking with celestial archons.</p>
+<p>These journeys exposed him to the fragility of the Material Plane and the heavy toll of planar incursions. Inspired by the legends of mortal knights who swore oaths to protect the weak, he knelt before an altar of the morning sun and took the <strong>Oath of Devotion</strong>. As an emissary to the Material Plane, he now travels the land, carrying out his diplomatic duties while defending the innocent with his shield, song, and moon-touched blade.</p>
+</div>
+</body>
+</html>

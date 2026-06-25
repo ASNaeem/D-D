@@ -1,0 +1,390 @@
+% dnd5e_sheet.sty - Exact replica of Official D&D 2024 Character Sheet
+% Uses TikZ absolute-position canvas + hyperref fillable form fields.
+% Coordinate system: (0,0) at bottom-left of letter page, inches as unit.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{dnd5e_sheet}[2026/06/25 Official D&D 2024 Character Sheet Replica]
+
+% --- Required Packages ---
+\RequirePackage[letterpaper, margin=0in]{geometry}
+\RequirePackage{tikz}
+\RequirePackage{xcolor}
+\RequirePackage{ifthen}
+\RequirePackage{calc}
+\RequirePackage{pgfmath}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+
+\RequirePackage[hidelinks]{hyperref}
+
+
+% --- TikZ Libraries ---
+\usetikzlibrary{shapes.misc, positioning, calc, decorations.markings}
+
+% --- Page Setup ---
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+% --- Colors (Official B&W aesthetic) ---
+\definecolor{sheetblack}{HTML}{000000}
+\definecolor{sheetgray}{HTML}{666666}
+\definecolor{sheetlightgray}{HTML}{CCCCCC}
+\definecolor{sheetbg}{HTML}{FFFFFF}
+
+% --- Font Shortcuts ---
+\newcommand{\sheetfont}{\sffamily}
+\newcommand{\sheettitle}[1]{{\sheetfont\bfseries\footnotesize\MakeUppercase{#1}}}
+\newcommand{\sheetlabel}[1]{{\sheetfont\tiny\MakeUppercase{#1}}}
+
+% --- Core Drawing Style ---
+\tikzset{
+    sheet box/.style={
+        draw=sheetblack,
+        line width=0.8pt,
+        rounded corners=3pt,
+        fill=none
+    },
+    sheet box thick/.style={
+        draw=sheetblack,
+        line width=1.2pt,
+        rounded corners=4pt,
+        fill=none
+    },
+    notched box/.style={
+        draw=sheetblack,
+        line width=0.8pt,
+        fill=none
+    },
+    label style/.style={
+        font=\sheetfont\bfseries\tiny,
+        text=sheetblack,
+        anchor=center
+    },
+    field underline/.style={
+        draw=sheetblack,
+        line width=0.5pt
+    }
+}
+
+% ============================================================
+% MACRO: \drawBox{x}{y}{w}{h}
+% Draw a rounded-corner box.
+% ============================================================
+\newcommand{\drawBox}[4]{%
+    \draw[sheet box] (#1, #2) rectangle ++(#3, #4);%
+}
+
+% ============================================================
+% MACRO: \drawThickBox{x}{y}{w}{h}
+% Draw a thick rounded-corner box.
+% ============================================================
+\newcommand{\drawThickBox}[4]{%
+    \draw[sheet box thick] (#1, #2) rectangle ++(#3, #4);%
+}
+
+% ============================================================
+% MACRO: \drawTitledBox{x}{y}{w}{h}{title}
+% Draw a box with a centered title at the top inside edge.
+% ============================================================
+\newcommand{\drawTitledBox}[5]{%
+    \draw[sheet box thick] (#1, #2) rectangle ++(#3, #4);%
+    \node[font=\sheetfont\bfseries\small, anchor=north, text=sheetblack]
+        at ({#1+#3/2}, {#2+#4-0.05}) {#5};%
+}
+
+% ============================================================
+% MACRO: \fieldLabel{x}{y}{text}
+% Place a small uppercase label.
+% ============================================================
+\newcommand{\fieldLabel}[3]{%
+    \node[label style] at (#1, #2) {\MakeUppercase{#3}};%
+}
+
+% ============================================================
+% MACRO: \fieldLabelLeft{x}{y}{text}
+% Place a small uppercase label anchored left.
+% ============================================================
+\newcommand{\fieldLabelLeft}[3]{%
+    \node[font=\sheetfont\bfseries\tiny, text=sheetblack, anchor=west] at (#1, #2) {\MakeUppercase{#3}};%
+}
+
+% ============================================================
+% MACRO: \fieldLabelRight{x}{y}{text}
+% Place a small uppercase label anchored right.
+% ============================================================
+\newcommand{\fieldLabelRight}[3]{%
+    \node[font=\sheetfont\bfseries\tiny, text=sheetblack, anchor=east] at (#1, #2) {\MakeUppercase{#3}};%
+}
+
+% ============================================================
+% MACRO: \inputField{x}{y}{w}
+% Draw a fillable underline (purely visual — for printed use).
+% ============================================================
+\newcommand{\inputField}[3]{%
+    \draw[field underline] (#1, #2) -- ++(#3, 0);%
+}
+
+\newcommand{\fillableFontSize}{8pt}
+
+% ============================================================
+% MACRO: \fillableText{x}{y}{w}{h}{name}{default_value}
+% Draw an interactive text field at (x, y)
+% ============================================================
+\newcommand{\fillableText}[6]{%
+    \node[anchor=south west, inner sep=0pt, outer sep=0pt] at (#1, #2) {%
+        \TextField[name=#5, value={#6}, width=#3in, height=#4, bordercolor=, backgroundcolor=, borderwidth=0, charsize=\fillableFontSize]{}%
+    };%
+}
+
+% ============================================================
+% MACRO: \fillableTextCenter{x}{y}{w}{h}{name}{default_value}
+% Draw an interactive centered text field at (x, y)
+% ============================================================
+\newcommand{\fillableTextCenter}[6]{%
+    \node[anchor=south west, inner sep=0pt, outer sep=0pt] at (#1, #2) {%
+        \TextField[name=#5, value={#6}, width=#3in, height=#4, bordercolor=, backgroundcolor=, borderwidth=0, charsize=\fillableFontSize, align=1]{}%
+    };%
+}
+
+% ============================================================
+% MACRO: \fillableTextMultiline{x}{y}{w}{h}{name}{default_value}
+% Draw an interactive multiline text field at (x, y)
+% ============================================================
+\newcommand{\fillableTextMultiline}[6]{%
+    \node[anchor=south west, inner sep=0pt, outer sep=0pt] at (#1, #2) {%
+        \TextField[name=#5, value={#6}, width=#3in, height=#4in, bordercolor=, backgroundcolor=, borderwidth=0, charsize=\fillableFontSize, multiline=true]{}%
+    };%
+}
+
+% ============================================================
+% MACRO: \fillableCheck{cx}{cy}{name}{is_checked}
+% Draw a transparent checkbox centered at (cx, cy)
+% ============================================================
+\newcommand{\fillableCheck}[4]{%
+    \node[anchor=center, inner sep=0pt, outer sep=0pt] at (#1, #2) {%
+        \ifthenelse{\equal{#4}{1}}{%
+            \CheckBox[name=#3, checked=true, width=9pt, height=9pt, bordercolor=, backgroundcolor=, borderwidth=0]{}%
+        }{%
+            \CheckBox[name=#3, checked=false, width=9pt, height=9pt, bordercolor=, backgroundcolor=, borderwidth=0]{}%
+        }%
+    };%
+}
+
+
+% ============================================================
+% MACRO: \emptyCircle{x}{y}{r}
+% Draw an empty circle (proficiency indicator).
+% ============================================================
+\newcommand{\emptyCircle}[3]{%
+    \draw[sheetblack, line width=0.6pt] (#1, #2) circle (#3);%
+}
+
+% ============================================================
+% MACRO: \filledCircle{x}{y}{r}
+% Draw a filled circle (proficiency indicator).
+% ============================================================
+\newcommand{\filledCircle}[3]{%
+    \fill[sheetblack] (#1, #2) circle (#3);%
+}
+
+% ============================================================
+% MACRO: \emptyDiamond{x}{y}{s}
+% Draw an empty diamond checkbox. s = half-size
+% ============================================================
+\newcommand{\emptyDiamond}[3]{%
+    \draw[sheetblack, line width=0.6pt]
+        (#1, {#2+#3}) -- ({#1+#3}, #2) -- (#1, {#2-#3}) -- ({#1-#3}, #2) -- cycle;%
+}
+
+% ============================================================
+% MACRO: \filledDiamond{x}{y}{s}
+% Draw a filled diamond checkbox. s = half-size
+% ============================================================
+\newcommand{\filledDiamond}[3]{%
+    \fill[sheetblack]
+        (#1, {#2+#3}) -- ({#1+#3}, #2) -- (#1, {#2-#3}) -- ({#1-#3}, #2) -- cycle;%
+}
+
+% ============================================================
+% MACRO: \abilityModCircle{cx}{cy}{radius}
+% Draw the large modifier circle used in ability cards.
+% ============================================================
+\newcommand{\abilityModCircle}[3]{%
+    \draw[sheetblack, line width=1.0pt] (#1, #2) circle (#3);%
+    % Small triangle at bottom of circle pointing down
+    \draw[sheetblack, line width=0.5pt, fill=sheetbg]
+        ({#1-0.06}, {#2-#3+0.02}) -- (#1, {#2-#3-0.06}) -- ({#1+0.06}, {#2-#3+0.02}) -- cycle;%
+}
+
+% ============================================================
+% MACRO: \abilityScoreBox{cx}{cy}{w}{h}
+% Draw the small score box to the right of the modifier circle.
+% ============================================================
+\newcommand{\abilityScoreBox}[4]{%
+    \draw[sheetblack, line width=0.6pt, rounded corners=1pt]
+        ({#1-#3/2}, {#2-#4/2}) rectangle ++({#3}, {#4});%
+}
+
+% ============================================================
+% MACRO: \skillLine{x}{y}{skillname}{checkx}
+% Draw one skill/save line: circle + underline + label.
+% x = left edge, y = baseline, skillname = text, checkx = circle x
+% ============================================================
+\newcommand{\skillLine}[4]{%
+    \emptyCircle{#4}{#2}{0.04}%
+    \inputField{{#4+0.08}}{#2}{0.35}%
+    \node[font=\sheetfont\footnotesize, anchor=west, text=sheetblack]
+        at ({#4+0.46}, #2) {#3};%
+}
+
+% ============================================================
+% MACRO: \skillLineFilled{x}{y}{skillname}{checkx}
+% Same as skillLine but with filled proficiency circle.
+% ============================================================
+\newcommand{\skillLineFilled}[4]{%
+    \filledCircle{#4}{#2}{0.04}%
+    \inputField{{#4+0.08}}{#2}{0.35}%
+    \node[font=\sheetfont\footnotesize, anchor=west, text=sheetblack]
+        at ({#4+0.46}, #2) {#3};%
+}
+
+% ============================================================
+% MACRO: \drawNotchedBox{x}{y}{w}{h}{notch}
+% Draw a box with decorative corner notches (like the quick stat boxes).
+% ============================================================
+\newcommand{\drawNotchedBox}[5]{%
+    \pgfmathsetmacro{\bx}{#1}%
+    \pgfmathsetmacro{\by}{#2}%
+    \pgfmathsetmacro{\bw}{#3}%
+    \pgfmathsetmacro{\bh}{#4}%
+    \pgfmathsetmacro{\bn}{#5}%
+    \pgfmathsetmacro{\bxw}{\bx+\bw}%
+    \pgfmathsetmacro{\byh}{\by+\bh}%
+    \pgfmathsetmacro{\bxbn}{\bx+\bn}%
+    \pgfmathsetmacro{\bxwbn}{\bxw-\bn}%
+    \pgfmathsetmacro{\bybn}{\by+\bn}%
+    \pgfmathsetmacro{\byhbn}{\byh-\bn}%
+    % Draw the box with notched corners
+    \draw[sheetblack, line width=0.8pt]
+        (\bxbn, \by) -- (\bxwbn, \by) -- (\bxw, \bybn)
+        -- (\bxw, \byhbn) -- (\bxwbn, \byh) -- (\bxbn, \byh)
+        -- (\bx, \byhbn) -- (\bx, \bybn) -- cycle;%
+    % Draw small decorative diamonds at each notch corner
+    \pgfmathsetmacro{\dcax}{\bx+\bn/2}%
+    \pgfmathsetmacro{\dcay}{\by+\bn/2}%
+    \pgfmathsetmacro{\dcbx}{\bxw-\bn/2}%
+    \pgfmathsetmacro{\dcby}{\by+\bn/2}%
+    \pgfmathsetmacro{\dccx}{\bxw-\bn/2}%
+    \pgfmathsetmacro{\dccy}{\byh-\bn/2}%
+    \pgfmathsetmacro{\dcdx}{\bx+\bn/2}%
+    \pgfmathsetmacro{\dcdy}{\byh-\bn/2}%
+    % Bottom-left diamond
+    \fill[sheetblack] (\dcax, {\dcay+0.03}) -- ({\dcax+0.03}, \dcay)
+        -- (\dcax, {\dcay-0.03}) -- ({\dcax-0.03}, \dcay) -- cycle;%
+    % Bottom-right diamond
+    \fill[sheetblack] (\dcbx, {\dcby+0.03}) -- ({\dcbx+0.03}, \dcby)
+        -- (\dcbx, {\dcby-0.03}) -- ({\dcbx-0.03}, \dcby) -- cycle;%
+    % Top-right diamond
+    \fill[sheetblack] (\dccx, {\dccy+0.03}) -- ({\dccx+0.03}, \dccy)
+        -- (\dccx, {\dccy-0.03}) -- ({\dccx-0.03}, \dccy) -- cycle;%
+    % Top-left diamond
+    \fill[sheetblack] (\dcdx, {\dcdy+0.03}) -- ({\dcdx+0.03}, \dcdy)
+        -- (\dcdx, {\dcdy-0.03}) -- ({\dcdx-0.03}, \dcdy) -- cycle;%
+}
+
+% ============================================================
+% MACRO: \drawGridArea{x}{y}{w}{h}{rows}{cols}
+% Draw a crosshatch grid (for the Appearance sketch area).
+% ============================================================
+\newcommand{\drawGridArea}[6]{%
+    \draw[sheet box] (#1, #2) rectangle ++(#3, #4);%
+    % Horizontal lines
+    \pgfmathsetmacro{\rstep}{#4/#5}%
+    \foreach \i in {1,...,\numexpr#5-1\relax} {%
+        \draw[sheetlightgray, line width=0.3pt]
+            (#1, {#2+\i*\rstep}) -- ++(#3, 0);%
+    }%
+    % Vertical lines
+    \pgfmathsetmacro{\cstep}{#3/#6}%
+    \foreach \j in {1,...,\numexpr#6-1\relax} {%
+        \draw[sheetlightgray, line width=0.3pt]
+            ({#1+\j*\cstep}, #2) -- ++(0, #4);%
+    }%
+}
+
+% ============================================================
+% MACRO: \drawWeaponRow{x}{y}{w}
+% Draw one weapon table row (underlines for each column).
+% ============================================================
+\newcommand{\drawWeaponRow}[3]{%
+    \pgfmathsetmacro{\wrNameW}{#3*0.35}%
+    \pgfmathsetmacro{\wrAtkX}{#1+#3*0.37}%
+    \pgfmathsetmacro{\wrAtkW}{#3*0.12}%
+    \pgfmathsetmacro{\wrDmgX}{#1+#3*0.51}%
+    \pgfmathsetmacro{\wrDmgW}{#3*0.20}%
+    \pgfmathsetmacro{\wrNotX}{#1+#3*0.73}%
+    \pgfmathsetmacro{\wrNotW}{#3*0.27}%
+    % Name underline
+    \inputField{#1}{#2}{\wrNameW}%
+    % Atk Bonus underline
+    \inputField{\wrAtkX}{#2}{\wrAtkW}%
+    % Damage & Type underline
+    \inputField{\wrDmgX}{#2}{\wrDmgW}%
+    % Notes underline
+    \inputField{\wrNotX}{#2}{\wrNotW}%
+}
+
+% ============================================================
+% MACRO: \drawSpellRow{x}{y}{w}{rownum}
+% Draw one spell table row with level, name, casting time, range, C/R/M diamonds, notes.
+% ============================================================
+\newcommand{\drawSpellRow}[4]{%
+    \pgfmathsetmacro{\srNameX}{#1+0.30}%
+    \pgfmathsetmacro{\srCastX}{#1+1.70}%
+    \pgfmathsetmacro{\srRangeX}{#1+2.20}%
+    \pgfmathsetmacro{\srCdX}{#1+2.82}%
+    \pgfmathsetmacro{\srClX}{#1+2.87}%
+    \pgfmathsetmacro{\srRdX}{#1+3.10}%
+    \pgfmathsetmacro{\srRlX}{#1+3.15}%
+    \pgfmathsetmacro{\srMdX}{#1+3.38}%
+    \pgfmathsetmacro{\srMlX}{#1+3.43}%
+    \pgfmathsetmacro{\srNotX}{#1+3.60}%
+    % Level underline
+    \inputField{#1}{#2}{0.25}%
+    % Name underline
+    \inputField{\srNameX}{#2}{1.35}%
+    % Casting time underline
+    \inputField{\srCastX}{#2}{0.45}%
+    % Range underline
+    \inputField{\srRangeX}{#2}{0.45}%
+    % C diamond
+    \emptyDiamond{\srCdX}{#2}{0.04}%
+    \node[font=\sheetfont\tiny, anchor=west] at (\srClX, #2) {C};%
+    % R diamond
+    \emptyDiamond{\srRdX}{#2}{0.04}%
+    \node[font=\sheetfont\tiny, anchor=west] at (\srRlX, #2) {R};%
+    % M diamond
+    \emptyDiamond{\srMdX}{#2}{0.04}%
+    \node[font=\sheetfont\tiny, anchor=west] at (\srMlX, #2) {M};%
+    % Notes underline
+    \inputField{\srNotX}{#2}{0.70}%
+}
+
+% ============================================================
+% MACRO: \coinSlot{x}{y}{label}
+% Draw one coin slot with up/down arrows and label.
+% ============================================================
+\newcommand{\coinSlot}[3]{%
+    \node[font=\sheetfont\tiny\bfseries, anchor=south] at (#1, {#2+0.35}) {#3};%
+    % Up arrow
+    \draw[sheetblack, line width=0.4pt]
+        ({#1-0.04}, {#2+0.30}) -- (#1, {#2+0.34}) -- ({#1+0.04}, {#2+0.30});%
+    % Box
+    \draw[sheetblack, line width=0.6pt, rounded corners=1pt]
+        ({#1-0.15}, #2) rectangle ++(0.30, 0.28);%
+    % Down arrow
+    \draw[sheetblack, line width=0.4pt]
+        ({#1-0.04}, {#2-0.02}) -- (#1, {#2-0.06}) -- ({#1+0.04}, {#2-0.02});%
+}
+
+\endinput

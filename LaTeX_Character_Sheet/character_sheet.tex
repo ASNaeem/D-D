@@ -1,0 +1,955 @@
+% character_sheet.tex — Exact replica of Official D&D 2024 (5.5e) Character Sheet
+% Full-page TikZ absolute-position canvas with hyperref fillable form fields.
+% Compile with: pdflatex character_sheet.tex
+
+\documentclass[10pt]{article}
+\usepackage{dnd5e_sheet}
+\input{character_data.tex}
+
+\begin{document}
+\begin{Form}
+\newcommand{\formatMod}[1]{\ifnum#1<0 #1\else+#1\fi}
+\pgfmathtruncatemacro{\strScore}{\BaseSTR + \STRBonus}
+\pgfmathtruncatemacro{\strMod}{floor((\strScore - 10) / 2)}
+\pgfmathtruncatemacro{\dexScore}{\BaseDEX + \DEXBonus}
+\pgfmathtruncatemacro{\dexMod}{floor((\dexScore - 10) / 2)}
+\pgfmathtruncatemacro{\conScore}{\BaseCON + \CONBonus}
+\pgfmathtruncatemacro{\conMod}{floor((\conScore - 10) / 2)}
+\pgfmathtruncatemacro{\intScore}{\BaseINT + \INTBonus}
+\pgfmathtruncatemacro{\intMod}{floor((\intScore - 10) / 2)}
+\pgfmathtruncatemacro{\wisScore}{\BaseWIS + \WISBonus}
+\pgfmathtruncatemacro{\wisMod}{floor((\wisScore - 10) / 2)}
+\pgfmathtruncatemacro{\chaScore}{\BaseCHA + \CHABonus}
+\pgfmathtruncatemacro{\chaMod}{floor((\chaScore - 10) / 2)}
+
+\pgfmathtruncatemacro{\strSave}{\strMod + \STRSaveProf * \ProfBonus + \AuraBonus + \CloakBonus}
+\pgfmathtruncatemacro{\dexSave}{\dexMod + \DEXSaveProf * \ProfBonus + \AuraBonus + \CloakBonus}
+\pgfmathtruncatemacro{\conSave}{\conMod + \CONSaveProf * \ProfBonus + \AuraBonus + \CloakBonus}
+\pgfmathtruncatemacro{\intSave}{\intMod + \INTSaveProf * \ProfBonus + \AuraBonus + \CloakBonus}
+\pgfmathtruncatemacro{\wisSave}{\wisMod + \WISSaveProf * \ProfBonus + \AuraBonus + \CloakBonus}
+\pgfmathtruncatemacro{\chaSave}{\chaMod + \CHASaveProf * \ProfBonus + \AuraBonus + \CloakBonus}
+
+
+% ================================================================
+%  PAGE 1 — Core Stats, Abilities, Combat, Features
+% ================================================================
+\null% Force page content for overlay
+\begin{tikzpicture}[remember picture, overlay,
+    shift={(current page.south west)}, x=1in, y=1in]
+
+% ----- Outer Page Border -----
+\draw[sheetblack, line width=1.5pt, rounded corners=6pt]
+    (0.22, 0.22) rectangle (8.28, 10.78);
+
+% ============================================================
+%  TOP HEADER BAR (Character Info, AC, HP, Hit Dice, Death Saves)
+% ============================================================% --- Left section: Character info fields ---
+\draw[sheet box] (0.30, 9.40) rectangle (3.65, 10.70);
+\fill[sheetblack] (0.30, 10.40) rectangle (3.65, 10.70);
+\node[font=\sheetfont\bfseries\small, text=white, anchor=center] at (1.975, 10.55) {DUNGEONS \& DRAGONS};
+
+% Character Name
+\fieldLabelLeft{0.35}{10.25}{Character Name}
+\inputField{0.35}{10.08}{3.20}
+\fillableText{0.35}{10.10}{3.20}{10pt}{charname}{\CharName}
+
+% Row 2: Class, Subclass, Level
+\fieldLabelLeft{0.35}{9.91}{Class}
+\inputField{0.35}{9.74}{1.00}
+\fillableText{0.35}{9.76}{1.00}{10pt}{class}{\CharClass}
+
+\fieldLabelLeft{1.45}{9.91}{Subclass}
+\inputField{1.45}{9.74}{1.30}
+\fillableText{1.45}{9.76}{1.30}{10pt}{subclass}{\CharSubclass}
+
+\fieldLabelLeft{2.85}{9.91}{Level}
+\inputField{2.85}{9.74}{0.70}
+\fillableTextCenter{2.85}{9.76}{0.70}{10pt}{level}{\CharLevel}
+
+% Row 3: Species, Background, Alignment
+\fieldLabelLeft{0.35}{9.57}{Species}
+\inputField{0.35}{9.44}{1.00}
+\fillableText{0.35}{9.46}{1.00}{10pt}{species}{\CharSpecies}
+
+\fieldLabelLeft{1.45}{9.57}{Background}
+\inputField{1.45}{9.44}{1.10}
+\fillableText{1.45}{9.46}{1.10}{10pt}{background}{\CharBackground}
+
+\fieldLabelLeft{2.65}{9.57}{Alignment}
+\inputField{2.65}{9.44}{0.90}
+\fillableText{2.65}{9.46}{0.90}{10pt}{alignment}{\CharAlignment}
+
+% --- Center section: Armor Class / XP ---
+\draw[sheet box thick] (3.75, 9.40) rectangle (5.25, 10.70);
+\fieldLabel{4.50}{10.58}{Armor Class}
+
+% Large AC circle
+\draw[sheetblack, line width=1.2pt] (4.50, 10.15) circle (0.22);
+\fillableTextCenter{4.35}{10.05}{0.30}{12pt}{ac}{\ArmorClass}
+
+% Shield diamond next to it
+\fieldLabel{5.05}{10.15}{Shield}
+\emptyDiamond{4.85}{10.15}{0.05}
+\fillableCheck{4.85}{10.15}{shield_equipped}{1}
+
+% Experience Points at the bottom
+\fieldLabel{4.50}{9.65}{Experience Points}
+\inputField{3.90}{9.48}{1.20}
+\fillableTextCenter{3.90}{9.50}{1.20}{10pt}{xp}{\CharXP}
+
+% --- Right-Center section: Hit Points ---
+\draw[sheet box thick] (5.35, 9.40) rectangle (6.85, 10.70);
+\fieldLabel{6.10}{10.58}{Hit Points}
+
+% Current HP (big field)
+\fieldLabel{6.10}{10.38}{Current HP}
+\inputField{5.50}{10.05}{1.20}
+\fillableTextCenter{5.50}{10.07}{1.20}{15pt}{hp_current}{\CurrentHP}
+
+% Max HP and Temp HP side-by-side at the bottom
+\fieldLabel{5.75}{9.75}{Max HP}
+\inputField{5.50}{9.48}{0.50}
+\fillableTextCenter{5.50}{9.50}{0.50}{10pt}{hp_max}{\MaxHP}
+
+\fieldLabel{6.45}{9.75}{Temp HP}
+\inputField{6.20}{9.48}{0.50}
+\fillableTextCenter{6.20}{9.50}{0.50}{10pt}{hp_temp}{\TempHP}
+
+% --- Right section: Hit Dice ---
+\draw[sheet box thick] (6.95, 9.40) rectangle (7.70, 10.70);
+\fieldLabel{7.32}{10.58}{Hit Dice}
+
+\fieldLabel{7.32}{10.38}{Spent}
+\inputField{7.05}{10.05}{0.50}
+\fillableTextCenter{7.05}{10.07}{0.50}{12pt}{hit_dice_spent}{0}
+
+\fieldLabel{7.32}{9.75}{Max}
+\inputField{7.05}{9.48}{0.50}
+\fillableTextCenter{7.05}{9.50}{0.50}{12pt}{hit_dice_max}{\HitDiceCount\HitDiceType}
+
+% --- Far Right section: Death Saves ---
+\draw[sheet box thick] (7.80, 9.40) rectangle (8.22, 10.70);
+\fieldLabel{8.01}{10.58}{Death}
+\fieldLabel{8.01}{10.46}{Saves}
+
+% Successes label and diamonds
+\node[font=\sheetfont\tiny, anchor=center, text=sheetblack] at (8.01, 10.22) {SUCCESSES};
+\emptyDiamond{7.88}{10.05}{0.035}
+\fillableCheck{7.88}{10.05}{death_success1}{0}
+\emptyDiamond{8.01}{10.05}{0.035}
+\fillableCheck{8.01}{10.05}{death_success2}{0}
+\emptyDiamond{8.14}{10.05}{0.035}
+\fillableCheck{8.14}{10.05}{death_success3}{0}
+
+% Failures label and diamonds
+\node[font=\sheetfont\tiny, anchor=center, text=sheetblack] at (8.01, 9.75) {FAILURES};
+\emptyDiamond{7.88}{9.55}{0.035}
+\fillableCheck{7.88}{9.55}{death_failure1}{0}
+\emptyDiamond{8.01}{9.55}{0.035}
+\fillableCheck{8.01}{9.55}{death_failure2}{0}
+\emptyDiamond{8.14}{9.55}{0.035}
+\fillableCheck{8.14}{9.55}{death_failure3}{0}
+
+
+% ============================================================
+%  QUICK STATS ROW (Proficiency, Initiative, Speed, Size, Passive Perception)
+% ============================================================
+
+% Proficiency Bonus (at the top of Column 1)
+\drawNotchedBox{0.30}{8.50}{2.30}{0.90}{0.10}
+\fieldLabel{1.45}{9.28}{Proficiency Bonus}
+\fillableTextCenter{1.125}{8.85}{0.65}{12pt}{prof_bonus}{+\ProfBonus}
+
+
+% Column 3 Quick Stats Bar (at the top of Column 3, above Weapons)
+\drawNotchedBox{5.10}{8.50}{0.78}{0.90}{0.08}
+\fieldLabel{5.49}{9.28}{Initiative}
+\fillableTextCenter{5.15}{8.85}{0.68}{12pt}{initiative}{\InitiativeBonus}
+
+\drawNotchedBox{5.88}{8.50}{0.78}{0.90}{0.08}
+\fieldLabel{6.27}{9.28}{Speed}
+\fillableTextCenter{5.93}{8.85}{0.68}{12pt}{speed}{\CharSpeed}
+
+\drawNotchedBox{6.66}{8.50}{0.78}{0.90}{0.08}
+\fieldLabel{7.05}{9.28}{Size}
+\fillableTextCenter{6.71}{8.85}{0.68}{12pt}{size}{M}
+
+\drawNotchedBox{7.44}{8.50}{0.78}{0.90}{0.08}
+\fieldLabel{7.83}{9.28}{Passive Perc.}
+\fillableTextCenter{7.49}{8.85}{0.68}{12pt}{passive_perception}{11}
+
+
+
+% ============================================================
+%  COLUMN 1: ABILITY SCORES (STR, DEX, CON) + Inspiration + Equipment
+% ============================================================
+
+% --- STRENGTH ---
+\drawThickBox{0.30}{6.72}{2.30}{1.70}
+\fieldLabelLeft{0.42}{8.28}{Strength}
+
+% STR Modifier circle
+\abilityModCircle{1.05}{7.90}{0.30}
+\fieldLabel{1.05}{7.42}{Modifier}
+\fillableTextCenter{0.90}{7.80}{0.30}{12pt}{str_mod}{+\strMod}
+
+% STR Score box
+\abilityScoreBox{1.90}{7.98}{0.35}{0.28}
+\fieldLabel{1.90}{7.42}{Score}
+\fillableTextCenter{1.725}{7.84}{0.35}{12pt}{str_score}{\strScore}
+
+% STR Saving Throw
+\skillLine{0.40}{7.17}{Saving Throw}{0.48}
+\fillableCheck{0.48}{7.17}{save_str_prof}{\STRSaveProf}
+\fillableText{0.94}{7.17}{0.35}{10pt}{save_str_val}{+\strSave}
+
+% STR Skills
+\skillLine{0.40}{6.92}{Athletics}{0.48}
+\fillableCheck{0.48}{6.92}{skill_athletics_prof}{\ProfAthletics}
+\pgfmathtruncatemacro{\athleticsVal}{\strMod + \ProfAthletics * \ProfBonus}
+\fillableText{0.94}{6.92}{0.35}{10pt}{skill_athletics_val}{+\athleticsVal}
+
+% --- DEXTERITY ---
+\drawThickBox{0.30}{4.80}{2.30}{1.82}
+\fieldLabelLeft{0.42}{6.48}{Dexterity}
+
+% DEX Modifier circle
+\abilityModCircle{1.05}{6.08}{0.30}
+\fieldLabel{1.05}{5.60}{Modifier}
+\fillableTextCenter{0.90}{5.98}{0.30}{12pt}{dex_mod}{+\dexMod}
+
+% DEX Score box
+\abilityScoreBox{1.90}{6.16}{0.35}{0.28}
+\fieldLabel{1.90}{5.60}{Score}
+\fillableTextCenter{1.725}{6.02}{0.35}{12pt}{dex_score}{\dexScore}
+
+% DEX Saving Throw
+\skillLine{0.40}{5.50}{Saving Throw}{0.48}
+\fillableCheck{0.48}{5.50}{save_dex_prof}{\DEXSaveProf}
+\fillableText{0.94}{5.50}{0.35}{10pt}{save_dex_val}{+\dexSave}
+
+% DEX Skills
+\skillLine{0.40}{5.27}{Acrobatics}{0.48}
+\fillableCheck{0.48}{5.27}{skill_acrobatics_prof}{\ProfAcrobatics}
+\pgfmathtruncatemacro{\acrobaticsVal}{\dexMod + \ProfAcrobatics * \ProfBonus}
+\fillableText{0.94}{5.27}{0.35}{10pt}{skill_acrobatics_val}{+\acrobaticsVal}
+
+\skillLine{0.40}{5.04}{Sleight of Hand}{0.48}
+\fillableCheck{0.48}{5.04}{skill_sleight_prof}{\ProfSleightOfHand}
+\pgfmathtruncatemacro{\sleightVal}{\dexMod + \ProfSleightOfHand * \ProfBonus}
+\fillableText{0.94}{5.04}{0.35}{10pt}{skill_sleight_val}{+\sleightVal}
+
+\skillLine{0.40}{4.81}{Stealth}{0.48}
+\fillableCheck{0.48}{4.81}{skill_stealth_prof}{\ProfStealth}
+\pgfmathtruncatemacro{\stealthVal}{\dexMod + \ProfStealth * \ProfBonus}
+\fillableText{0.94}{4.81}{0.35}{10pt}{skill_stealth_val}{+\stealthVal}
+
+% --- CONSTITUTION ---
+\drawThickBox{0.30}{3.58}{2.30}{1.12}
+\fieldLabelLeft{0.42}{4.56}{Constitution}
+
+% CON Modifier circle
+\abilityModCircle{1.05}{4.16}{0.30}
+\fieldLabel{1.05}{3.72}{Modifier}
+\fillableTextCenter{0.90}{4.06}{0.30}{12pt}{con_mod}{+\conMod}
+
+% CON Score box
+\abilityScoreBox{1.90}{4.24}{0.35}{0.28}
+\fieldLabel{1.90}{3.72}{Score}
+\fillableTextCenter{1.725}{4.10}{0.35}{12pt}{con_score}{\conScore}
+
+% CON Saving Throw
+\skillLine{0.40}{3.65}{Saving Throw}{0.48}
+\fillableCheck{0.48}{3.65}{save_con_prof}{\CONSaveProf}
+\fillableText{0.94}{3.65}{0.35}{10pt}{save_con_val}{+\conSave}
+
+% --- HEROIC INSPIRATION ---
+\drawThickBox{0.30}{2.78}{2.30}{0.70}
+\fieldLabelLeft{0.42}{3.35}{Heroic Inspiration}
+% Large diamond checkbox
+\draw[sheetblack, line width=1.0pt]
+    (1.45, 3.08) -- (1.55, 2.96) -- (1.45, 2.84) -- (1.35, 2.96) -- cycle;
+% Plus symbol inside
+\draw[sheetblack, line width=0.5pt] (1.42, 2.96) -- (1.48, 2.96);
+\draw[sheetblack, line width=0.5pt] (1.45, 2.93) -- (1.45, 2.99);
+\fillableCheck{1.45}{2.96}{heroic_inspiration}{0}
+
+% --- EQUIPMENT TRAINING & PROFICIENCIES ---
+\drawThickBox{0.30}{0.30}{2.30}{2.38}
+\fieldLabelLeft{0.42}{2.55}{Equipment Training \& Proficiencies}
+
+% Armor Training row
+\fieldLabelLeft{0.38}{2.32}{Armor Training}
+% Light
+\emptyDiamond{0.55}{2.12}{0.04}
+\fillableCheck{0.55}{2.12}{armor_light}{1}
+\node[font=\sheetfont\tiny, anchor=west] at (0.60, 2.12) {Light};
+% Medium
+\emptyDiamond{1.10}{2.12}{0.04}
+\fillableCheck{1.10}{2.12}{armor_medium}{1}
+\node[font=\sheetfont\tiny, anchor=west] at (1.15, 2.12) {Medium};
+% Heavy
+\emptyDiamond{1.72}{2.12}{0.04}
+\fillableCheck{1.72}{2.12}{armor_heavy}{1}
+\node[font=\sheetfont\tiny, anchor=west] at (1.77, 2.12) {Heavy};
+% Shields
+\emptyDiamond{2.20}{2.12}{0.04}
+\fillableCheck{2.20}{2.12}{armor_shields}{1}
+\node[font=\sheetfont\tiny, anchor=west] at (2.25, 2.12) {Shields};
+
+% Weapons section
+\fieldLabelLeft{0.38}{1.92}{Weapons}
+\inputField{0.38}{1.72}{2.10}
+\fillableText{0.38}{1.74}{2.10}{10pt}{weapon_prof1}{Simple Weapons, Martial Weapons}
+\inputField{0.38}{1.52}{2.10}
+\fillableText{0.38}{1.54}{2.10}{10pt}{weapon_prof2}{}
+\inputField{0.38}{1.32}{2.10}
+\fillableText{0.38}{1.34}{2.10}{10pt}{weapon_prof3}{}
+
+% Divider
+\draw[field underline] (0.38, 1.15) -- (2.48, 1.15);
+
+% Tools section
+\fieldLabelLeft{0.38}{1.00}{Tools}
+\inputField{0.38}{0.80}{2.10}
+\fillableText{0.38}{0.82}{2.10}{10pt}{tool_prof1}{Pan Flute, Gaming Set}
+\inputField{0.38}{0.60}{2.10}
+\fillableText{0.38}{0.62}{2.10}{10pt}{tool_prof2}{Musical Instrument}
+
+
+
+% ============================================================
+%  COLUMN 2: ABILITY SCORES (INT skills, WIS, CHA)
+% ============================================================
+
+% --- INTELLIGENCE ---
+\drawThickBox{2.70}{7.10}{2.30}{2.30}
+\fieldLabelLeft{2.82}{9.26}{Intelligence}
+
+% INT Modifier circle
+\abilityModCircle{3.45}{8.87}{0.30}
+\fieldLabel{3.45}{8.39}{Modifier}
+\fillableTextCenter{3.30}{8.77}{0.30}{12pt}{int_mod}{+\intMod}
+
+% INT Score box
+\abilityScoreBox{4.30}{8.95}{0.35}{0.28}
+\fieldLabel{4.30}{8.39}{Score}
+\fillableTextCenter{4.125}{8.81}{0.35}{12pt}{int_score}{\intScore}
+
+% INT Saving Throw
+\skillLine{2.80}{8.25}{Saving Throw}{2.88}
+\fillableCheck{2.88}{8.25}{save_int_prof}{\INTSaveProf}
+\fillableText{3.34}{8.25}{0.35}{10pt}{save_int_val}{+\intSave}
+
+% INT Skills (spaced by 0.22)
+\skillLine{2.80}{8.03}{Arcana}{2.88}
+\fillableCheck{2.88}{8.03}{skill_arcana_prof}{\ProfArcana}
+\fillableText{3.34}{8.03}{0.35}{10pt}{skill_arcana_val}{+\intMod}
+
+\skillLine{2.80}{7.81}{History}{2.88}
+\fillableCheck{2.88}{7.81}{skill_history_prof}{\ProfHistory}
+\fillableText{3.34}{7.81}{0.35}{10pt}{skill_history_val}{+\intMod}
+
+\skillLine{2.80}{7.59}{Investigation}{2.88}
+\fillableCheck{2.88}{7.59}{skill_investigation_prof}{\ProfInvestigation}
+\fillableText{3.34}{7.59}{0.35}{10pt}{skill_investigation_val}{+\intMod}
+
+\skillLine{2.80}{7.37}{Nature}{2.88}
+\fillableCheck{2.88}{7.37}{skill_nature_prof}{\ProfNature}
+\fillableText{3.34}{7.37}{0.35}{10pt}{skill_nature_val}{+\intMod}
+
+\skillLine{2.80}{7.15}{Religion}{2.88}
+\fillableCheck{2.88}{7.15}{skill_religion_prof}{\ProfReligion}
+\pgfmathtruncatemacro{\religionVal}{\intMod + \ProfReligion * \ProfBonus}
+\fillableText{3.34}{7.15}{0.35}{10pt}{skill_religion_val}{+\religionVal}
+
+% --- WISDOM ---
+\drawThickBox{2.70}{4.70}{2.30}{2.30}
+\fieldLabelLeft{2.82}{6.86}{Wisdom}
+
+% WIS Modifier circle
+\abilityModCircle{3.45}{6.47}{0.30}
+\fieldLabel{3.45}{5.88}{Modifier}
+\fillableTextCenter{3.30}{6.37}{0.30}{12pt}{wis_mod}{+\wisMod}
+
+% WIS Score box
+\abilityScoreBox{4.30}{6.55}{0.35}{0.28}
+\fieldLabel{4.30}{5.88}{Score}
+\fillableTextCenter{4.125}{6.41}{0.35}{12pt}{wis_score}{\wisScore}
+
+% WIS Saving Throw
+\skillLine{2.80}{5.85}{Saving Throw}{2.88}
+\fillableCheck{2.88}{5.85}{save_wis_prof}{\WISSaveProf}
+\fillableText{3.34}{5.85}{0.35}{10pt}{save_wis_val}{+\wisSave}
+
+% WIS Skills (spaced by 0.22)
+\skillLine{2.80}{5.63}{Animal Handling}{2.88}
+\fillableCheck{2.88}{5.63}{skill_animal_prof}{\ProfAnimalHandling}
+\fillableText{3.34}{5.63}{0.35}{10pt}{skill_animal_val}{+\wisMod}
+
+\skillLine{2.80}{5.41}{Insight}{2.88}
+\fillableCheck{2.88}{5.41}{skill_insight_prof}{\ProfInsight}
+\pgfmathtruncatemacro{\insightVal}{\wisMod + \ProfInsight * \ProfBonus}
+\fillableText{3.34}{5.41}{0.35}{10pt}{skill_insight_val}{+\insightVal}
+
+\skillLine{2.80}{5.19}{Medicine}{2.88}
+\fillableCheck{2.88}{5.19}{skill_medicine_prof}{\ProfMedicine}
+\fillableText{3.34}{5.19}{0.35}{10pt}{skill_medicine_val}{+\wisMod}
+
+\skillLine{2.80}{4.97}{Perception}{2.88}
+\fillableCheck{2.88}{4.97}{skill_perception_prof}{\ProfPerception}
+\fillableText{3.34}{4.97}{0.35}{10pt}{skill_perception_val}{+\wisMod}
+
+\skillLine{2.80}{4.75}{Survival}{2.88}
+\fillableCheck{2.88}{4.75}{skill_survival_prof}{\ProfSurvival}
+\fillableText{3.34}{4.75}{0.35}{10pt}{skill_survival_val}{+\wisMod}
+
+% --- CHARISMA ---
+\drawThickBox{2.70}{2.10}{2.30}{2.30}
+\fieldLabelLeft{2.82}{4.26}{Charisma}
+
+% CHA Modifier circle
+\abilityModCircle{3.45}{3.87}{0.30}
+\fieldLabel{3.45}{3.28}{Modifier}
+\fillableTextCenter{3.30}{3.77}{0.30}{12pt}{cha_mod}{+\chaMod}
+
+% CHA Score box
+\abilityScoreBox{4.30}{3.95}{0.35}{0.28}
+\fieldLabel{4.30}{3.28}{Score}
+\fillableTextCenter{4.125}{3.81}{0.35}{12pt}{cha_score}{\chaScore}
+
+% CHA Saving Throw
+\skillLine{2.80}{3.25}{Saving Throw}{2.88}
+\fillableCheck{2.88}{3.25}{save_cha_prof}{\CHASaveProf}
+\fillableText{3.34}{3.25}{0.35}{10pt}{save_cha_val}{+\chaSave}
+
+% CHA Skills (spaced by 0.22)
+\skillLine{2.80}{3.03}{Deception}{2.88}
+\fillableCheck{2.88}{3.03}{skill_deception_prof}{\ProfDeception}
+\fillableText{3.34}{3.03}{0.35}{10pt}{skill_deception_val}{+\chaMod}
+
+\skillLine{2.80}{2.81}{Intimidation}{2.88}
+\fillableCheck{2.88}{2.81}{skill_intimidation_prof}{\ProfIntimidation}
+\pgfmathtruncatemacro{\intimidationVal}{\chaMod + \ProfIntimidation * \ProfBonus}
+\fillableText{3.34}{2.81}{0.35}{10pt}{skill_intimidation_val}{+\intimidationVal}
+
+\skillLine{2.80}{2.59}{Performance}{2.88}
+\fillableCheck{2.88}{2.59}{skill_performance_prof}{\ProfPerformance}
+\pgfmathtruncatemacro{\performanceVal}{\chaMod + \ProfPerformance * \ProfBonus}
+\fillableText{3.34}{2.59}{0.35}{10pt}{skill_performance_val}{+\performanceVal}
+
+\skillLine{2.80}{2.37}{Persuasion}{2.88}
+\fillableCheck{2.88}{2.37}{skill_persuasion_prof}{\ProfPersuasion}
+\pgfmathtruncatemacro{\persuasionVal}{\chaMod + \ProfPersuasion * \ProfBonus}
+\fillableText{3.34}{2.37}{0.35}{10pt}{skill_persuasion_val}{+\persuasionVal}
+
+
+% --- FEATS (Moved from Column 3) ---
+\drawThickBox{2.70}{0.30}{2.30}{1.70}
+\fieldLabelLeft{2.82}{1.85}{Feats}
+
+\inputField{2.78}{1.60}{2.14}
+\fillableText{2.78}{1.62}{2.14}{8pt}{feat_l1}{Alert (Origin)}
+\inputField{2.78}{1.42}{2.14}
+\fillableText{2.78}{1.44}{2.14}{8pt}{feat_l2}{ - Add PB to Init}
+\inputField{2.78}{1.26}{2.14}
+\fillableText{2.78}{1.28}{2.14}{8pt}{feat_l3}{ - Swap Initiative}
+\inputField{2.78}{1.08}{2.14}
+\fillableText{2.78}{1.10}{2.14}{8pt}{feat_l4}{War Caster (Level 4)}
+\inputField{2.78}{0.90}{2.14}
+\fillableText{2.78}{0.92}{2.14}{8pt}{feat_l5}{ - Adv on Conc. saves}
+\inputField{2.78}{0.72}{2.14}
+\fillableText{2.78}{0.74}{2.14}{8pt}{feat_l6}{ - Reactive Spell (opp)}
+\inputField{2.78}{0.54}{2.14}
+\fillableText{2.78}{0.56}{2.14}{8pt}{feat_l7}{ - Somatic components ok}
+\inputField{2.78}{0.36}{2.14}
+\fillableText{2.78}{0.38}{2.14}{8pt}{feat_l8}{}
+
+
+
+
+% ============================================================
+%  COLUMN 3: COMBAT & FEATURES
+% ============================================================
+
+% --- WEAPONS & DAMAGE CANTRIPS ---
+\drawThickBox{5.10}{6.50}{3.12}{1.92}
+\fieldLabel{6.66}{8.28}{Weapons \& Damage Cantrips}
+
+% Column headers
+\node[font=\sheetfont\tiny, anchor=west, text=sheetblack] at (5.18, 8.10) {Name};
+\node[font=\sheetfont\tiny, anchor=west, text=sheetblack] at (6.38, 8.10) {Atk Bonus / DC};
+\node[font=\sheetfont\tiny, anchor=west, text=sheetblack] at (7.10, 8.10) {Damage \& Type};
+\node[font=\sheetfont\tiny, anchor=west, text=sheetblack] at (7.72, 8.10) {Notes};
+
+% Weapon rows (fillable)
+\drawWeaponRow{5.18}{7.88}{2.96}
+\fillableText{5.18}{7.90}{1.03}{10pt}{weap_name1}{Longsword (Moon-Touched)}
+\fillableTextCenter{6.27}{7.90}{0.35}{10pt}{weap_atk1}{+7}
+\fillableTextCenter{6.69}{7.90}{0.59}{10pt}{weap_dmg1}{1d8+4 S}
+\fillableText{7.34}{7.90}{0.80}{10pt}{weap_notes1}{Magical, Sap}
+
+\drawWeaponRow{5.18}{7.66}{2.96}
+\fillableText{5.18}{7.68}{1.03}{10pt}{weap_name2}{Ram (Unarmed Strike)}
+\fillableTextCenter{6.27}{7.68}{0.35}{10pt}{weap_atk2}{+7}
+\fillableTextCenter{6.69}{7.68}{0.59}{10pt}{weap_dmg2}{1d6+4 B}
+\fillableText{7.34}{7.68}{0.80}{10pt}{weap_notes2}{Satyr Trait}
+
+\drawWeaponRow{5.18}{7.44}{2.96}
+\fillableText{5.18}{7.46}{1.03}{10pt}{weap_name3}{Javelin (Thrown)}
+\fillableTextCenter{6.27}{7.46}{0.35}{10pt}{weap_atk3}{+7}
+\fillableTextCenter{6.69}{7.46}{0.59}{10pt}{weap_dmg3}{1d6+4 P}
+\fillableText{7.34}{7.46}{0.80}{10pt}{weap_notes3}{Slow, 30/120}
+
+\drawWeaponRow{5.18}{7.22}{2.96}
+\fillableText{5.18}{7.24}{1.03}{10pt}{weap_name4}{}
+\fillableTextCenter{6.27}{7.24}{0.35}{10pt}{weap_atk4}{}
+\fillableTextCenter{6.69}{7.24}{0.59}{10pt}{weap_dmg4}{}
+\fillableText{7.34}{7.24}{0.80}{10pt}{weap_notes4}{}
+
+\drawWeaponRow{5.18}{7.00}{2.96}
+\fillableText{5.18}{7.02}{1.03}{10pt}{weap_name5}{}
+\fillableTextCenter{6.27}{7.02}{0.35}{10pt}{weap_atk5}{}
+\fillableTextCenter{6.69}{7.02}{0.59}{10pt}{weap_dmg5}{}
+\fillableText{7.34}{7.02}{0.80}{10pt}{weap_notes5}{}
+
+\drawWeaponRow{5.18}{6.78}{2.96}
+\fillableText{5.18}{6.80}{1.03}{10pt}{weap_name6}{}
+\fillableTextCenter{6.27}{6.80}{0.35}{10pt}{weap_atk6}{}
+\fillableTextCenter{6.69}{6.80}{0.59}{10pt}{weap_dmg6}{}
+\fillableText{7.34}{6.80}{0.80}{10pt}{weap_notes6}{}
+
+\drawWeaponRow{5.18}{6.56}{2.96}
+\fillableText{5.18}{6.58}{1.03}{10pt}{weap_name7}{}
+\fillableTextCenter{6.27}{6.58}{0.35}{10pt}{weap_atk7}{}
+\fillableTextCenter{6.69}{6.58}{0.59}{10pt}{weap_dmg7}{}
+\fillableText{7.34}{6.58}{0.80}{10pt}{weap_notes7}{}
+
+% --- CLASS FEATURES ---
+\drawThickBox{5.10}{3.18}{3.12}{3.22}
+\fieldLabel{6.66}{6.28}{Class Features}
+
+% Feature lines (explicitly defined and fillable)
+\inputField{5.18}{6.05}{1.40}
+\fillableText{5.18}{6.07}{1.40}{10pt}{feat_c1_l1}{Lay on Hands: 30 HP}
+\inputField{6.68}{6.05}{1.46}
+\fillableText{6.68}{6.07}{1.46}{10pt}{feat_c2_l1}{Weapon Mastery (Sap, Slow)}
+
+\inputField{5.18}{5.83}{1.40}
+\fillableText{5.18}{5.85}{1.40}{10pt}{feat_c1_l2}{Aura of Protection (+4)}
+\inputField{6.68}{5.83}{1.46}
+\fillableText{6.68}{5.85}{1.46}{10pt}{feat_c2_l2}{Divine Smite (always prep)}
+
+\inputField{5.18}{5.61}{1.40}
+\fillableText{5.18}{5.63}{1.40}{10pt}{feat_c1_l3}{Channel Divinity (2/Rest)}
+\inputField{6.68}{5.61}{1.46}
+\fillableText{6.68}{5.63}{1.46}{10pt}{feat_c2_l3}{Extra Attack (2/Action)}
+
+\inputField{5.18}{5.39}{1.40}
+\fillableText{5.18}{5.41}{1.40}{10pt}{feat_c1_l4}{ - CD: Divine Sense}
+\inputField{6.68}{5.39}{1.46}
+\fillableText{6.68}{5.41}{1.46}{10pt}{feat_c2_l4}{Defense Style (+1 AC)}
+
+\inputField{5.18}{5.17}{1.40}
+\fillableText{5.18}{5.19}{1.40}{10pt}{feat_c1_l5}{ - CD: Sacred Weapon}
+\inputField{6.68}{5.17}{1.46}
+\fillableText{6.68}{5.19}{1.46}{10pt}{feat_c2_l5}{Faithful Steed (Find Steed)}
+
+\inputField{5.18}{4.95}{1.40}
+\fillableText{5.18}{4.97}{1.40}{10pt}{feat_c1_l6}{ - CD: Turn the Unholy}
+\inputField{6.68}{4.95}{1.46}
+\fillableText{6.68}{4.97}{1.46}{10pt}{feat_c2_l6}{Planar Envoy Feature}
+
+\inputField{5.18}{4.73}{1.40}
+\fillableText{5.18}{4.75}{1.40}{10pt}{feat_c1_l7}{ - CD: Abjure Foes}
+\inputField{6.68}{4.73}{1.46}
+\fillableText{6.68}{4.75}{1.46}{10pt}{feat_c2_l7}{Holy Symbol focus}
+
+\inputField{5.18}{4.51}{1.40}
+\fillableText{5.18}{4.53}{1.40}{10pt}{feat_c1_l8}{}
+\inputField{6.68}{4.51}{1.46}
+\fillableText{6.68}{4.53}{1.46}{10pt}{feat_c2_l8}{}
+
+\inputField{5.18}{4.29}{1.40}
+\fillableText{5.18}{4.31}{1.40}{10pt}{feat_c1_l9}{}
+\inputField{6.68}{4.29}{1.46}
+\fillableText{6.68}{4.31}{1.46}{10pt}{feat_c2_l9}{}
+
+\inputField{5.18}{4.07}{1.40}
+\fillableText{5.18}{4.09}{1.40}{10pt}{feat_c1_l10}{}
+\inputField{6.68}{4.07}{1.46}
+\fillableText{6.68}{4.09}{1.46}{10pt}{feat_c2_l10}{}
+
+\inputField{5.18}{3.85}{1.40}
+\fillableText{5.18}{3.87}{1.40}{10pt}{feat_c1_l11}{}
+\inputField{6.68}{3.85}{1.46}
+\fillableText{6.68}{3.87}{1.46}{10pt}{feat_c2_l11}{}
+
+\inputField{5.18}{3.63}{1.40}
+\fillableText{5.18}{3.65}{1.40}{10pt}{feat_c1_l12}{}
+\inputField{6.68}{3.63}{1.46}
+\fillableText{6.68}{3.65}{1.46}{10pt}{feat_c2_l12}{}
+
+\inputField{5.18}{3.41}{1.40}
+\fillableText{5.18}{3.43}{1.40}{10pt}{feat_c1_l13}{}
+\inputField{6.68}{3.41}{1.46}
+\fillableText{6.68}{3.43}{1.46}{10pt}{feat_c2_l13}{}
+
+% --- SPECIES TRAITS ---
+\drawThickBox{5.10}{0.30}{3.12}{2.78}
+\fieldLabel{6.66}{2.96}{Species Traits}
+
+% Traits lines (explicit and fillable)
+\inputField{5.18}{2.73}{2.96}
+\fillableText{5.18}{2.75}{2.96}{10pt}{trait_l1}{Fey Creature Type}
+\inputField{5.18}{2.51}{2.96}
+\fillableText{5.18}{2.53}{2.96}{10pt}{trait_l2}{Magic Resistance}
+\inputField{5.18}{2.29}{2.96}
+\fillableText{5.18}{2.31}{2.96}{10pt}{trait_l3}{ (Adv vs spells saves)}
+\inputField{5.18}{2.07}{2.96}
+\fillableText{5.18}{2.09}{2.96}{10pt}{trait_l4}{Mirthful Leaps (+d8)}
+\inputField{5.18}{1.85}{2.96}
+\fillableText{5.18}{1.87}{2.96}{10pt}{trait_l5}{Reveler (Skills/Flute)}
+\inputField{5.18}{1.63}{2.96}
+\fillableText{5.18}{1.65}{2.96}{10pt}{trait_l6}{Ram Unarmed Strike}
+\inputField{5.18}{1.41}{2.96}
+\fillableText{5.18}{1.43}{2.96}{10pt}{trait_l7}{}
+\inputField{5.18}{1.19}{2.96}
+\fillableText{5.18}{1.21}{2.96}{10pt}{trait_l8}{}
+\inputField{5.18}{0.97}{2.96}
+\fillableText{5.18}{0.99}{2.96}{10pt}{trait_l9}{}
+\inputField{5.18}{0.75}{2.96}
+\fillableText{5.18}{0.77}{2.96}{10pt}{trait_l10}{}
+\inputField{5.18}{0.53}{2.96}
+\fillableText{5.18}{0.55}{2.96}{10pt}{trait_l11}{}
+
+
+\end{tikzpicture}
+
+\newpage
+
+% ================================================================
+%  PAGE 2 — Spells, Inventory, Backstory
+% ================================================================
+\begin{tikzpicture}[remember picture, overlay,
+    shift={(current page.south west)}, x=1in, y=1in]
+
+% ----- Outer Page Border -----
+\draw[sheetblack, line width=1.5pt, rounded corners=6pt]
+    (0.22, 0.22) rectangle (8.28, 10.78);
+
+% ============================================================
+% ============================================================
+%  TOP ROW: SPELLCASTING HEADER
+% ============================================================
+\draw[sheet box] (0.30, 9.85) rectangle (8.22, 10.70);
+
+% Character Name
+\fieldLabelLeft{0.35}{10.55}{Character Name}
+\inputField{0.35}{10.30}{2.80}
+\fillableText{0.35}{10.32}{2.80}{12pt}{spell_charname}{\CharName}
+
+% Spellcasting Class
+\fieldLabelLeft{3.25}{10.55}{Spellcasting Class}
+\inputField{3.25}{10.30}{1.20}
+\fillableText{3.25}{10.32}{1.20}{12pt}{spell_class}{\CharClass}
+
+% Spellcasting Ability
+\fieldLabelLeft{4.55}{10.55}{Spellcasting Ability}
+\inputField{4.55}{10.30}{1.00}
+\fillableText{4.55}{10.32}{1.00}{12pt}{spell_ability}{Charisma}
+
+% Spell Save DC
+\fieldLabelLeft{5.65}{10.55}{Spell Save DC}
+\inputField{5.65}{10.30}{1.10}
+\fillableText{5.65}{10.32}{1.10}{12pt}{spell_dc}{15}
+
+% Spell Attack Bonus
+\fieldLabelLeft{6.85}{10.55}{Spell Attack Bonus}
+\inputField{6.85}{10.30}{1.30}
+\fillableText{6.85}{10.32}{1.30}{12pt}{spell_atk}{+7}
+
+
+% ============================================================
+%  LEFT COLUMN: SPELL SLOTS & SPELL TABLE
+% ============================================================
+
+% --- Spell Slots Tracker ---
+\drawThickBox{0.30}{8.60}{4.80}{1.00}
+\fieldLabel{2.70}{9.48}{Spell Slots}
+
+% Levels 1 to 9 horizontal layout
+% Level 1
+\node[font=\sheetfont\tiny\bfseries] at (0.55, 9.25) {1ST};
+\inputField{0.45}{8.95}{0.20}
+\fillableTextCenter{0.45}{8.97}{0.20}{10pt}{slots_tot1}{4}
+\emptyCircle{0.38}{8.72}{0.045} \fillableCheck{0.38}{8.72}{slot_exp1_1}{0}
+\emptyCircle{0.49}{8.72}{0.045} \fillableCheck{0.49}{8.72}{slot_exp1_2}{0}
+\emptyCircle{0.60}{8.72}{0.045} \fillableCheck{0.60}{8.72}{slot_exp1_3}{0}
+\emptyCircle{0.71}{8.72}{0.045} \fillableCheck{0.71}{8.72}{slot_exp1_4}{0}
+
+% Level 2
+\node[font=\sheetfont\tiny\bfseries] at (1.06, 9.25) {2ND};
+\inputField{0.96}{8.95}{0.20}
+\fillableTextCenter{0.96}{8.97}{0.20}{10pt}{slots_tot2}{2}
+\emptyCircle{0.95}{8.72}{0.045} \fillableCheck{0.95}{8.72}{slot_exp2_1}{0}
+\emptyCircle{1.06}{8.72}{0.045} \fillableCheck{1.06}{8.72}{slot_exp2_2}{0}
+\emptyCircle{1.17}{8.72}{0.045} \fillableCheck{1.17}{8.72}{slot_exp2_3}{0}
+
+% Level 3
+\node[font=\sheetfont\tiny\bfseries] at (1.57, 9.25) {3RD};
+\inputField{1.47}{8.95}{0.20}
+\fillableTextCenter{1.47}{8.97}{0.20}{10pt}{slots_tot3}{}
+\emptyCircle{1.46}{8.72}{0.045} \fillableCheck{1.46}{8.72}{slot_exp3_1}{0}
+\emptyCircle{1.57}{8.72}{0.045} \fillableCheck{1.57}{8.72}{slot_exp3_2}{0}
+\emptyCircle{1.68}{8.72}{0.045} \fillableCheck{1.68}{8.72}{slot_exp3_3}{0}
+
+% Level 4
+\node[font=\sheetfont\tiny\bfseries] at (2.08, 9.25) {4TH};
+\inputField{1.98}{8.95}{0.20}
+\fillableTextCenter{1.98}{8.97}{0.20}{10pt}{slots_tot4}{}
+\emptyCircle{1.97}{8.72}{0.045} \fillableCheck{1.97}{8.72}{slot_exp4_1}{0}
+\emptyCircle{2.08}{8.72}{0.045} \fillableCheck{2.08}{8.72}{slot_exp4_2}{0}
+\emptyCircle{2.19}{8.72}{0.045} \fillableCheck{2.19}{8.72}{slot_exp4_3}{0}
+
+% Level 5
+\node[font=\sheetfont\tiny\bfseries] at (2.59, 9.25) {5TH};
+\inputField{2.49}{8.95}{0.20}
+\fillableTextCenter{2.49}{8.97}{0.20}{10pt}{slots_tot5}{}
+\emptyCircle{2.48}{8.72}{0.045} \fillableCheck{2.48}{8.72}{slot_exp5_1}{0}
+\emptyCircle{2.59}{8.72}{0.045} \fillableCheck{2.59}{8.72}{slot_exp5_2}{0}
+\emptyCircle{2.70}{8.72}{0.045} \fillableCheck{2.70}{8.72}{slot_exp5_3}{0}
+
+% Level 6
+\node[font=\sheetfont\tiny\bfseries] at (3.10, 9.25) {6TH};
+\inputField{3.00}{8.95}{0.20}
+\fillableTextCenter{3.00}{8.97}{0.20}{10pt}{slots_tot6}{}
+\emptyCircle{3.04}{8.72}{0.045} \fillableCheck{3.04}{8.72}{slot_exp6_1}{0}
+\emptyCircle{3.15}{8.72}{0.045} \fillableCheck{3.15}{8.72}{slot_exp6_2}{0}
+
+% Level 7
+\node[font=\sheetfont\tiny\bfseries] at (3.61, 9.25) {7TH};
+\inputField{3.51}{8.95}{0.20}
+\fillableTextCenter{3.51}{8.97}{0.20}{10pt}{slots_tot7}{}
+\emptyCircle{3.55}{8.72}{0.045} \fillableCheck{3.55}{8.72}{slot_exp7_1}{0}
+\emptyCircle{3.66}{8.72}{0.045} \fillableCheck{3.66}{8.72}{slot_exp7_2}{0}
+
+% Level 8
+\node[font=\sheetfont\tiny\bfseries] at (4.12, 9.25) {8TH};
+\inputField{4.02}{8.95}{0.20}
+\fillableTextCenter{4.02}{8.97}{0.20}{10pt}{slots_tot8}{}
+\emptyCircle{4.12}{8.72}{0.045} \fillableCheck{4.12}{8.72}{slot_exp8_1}{0}
+
+% Level 9
+\node[font=\sheetfont\tiny\bfseries] at (4.63, 9.25) {9TH};
+\inputField{4.53}{8.95}{0.20}
+\fillableTextCenter{4.53}{8.97}{0.20}{10pt}{slots_tot9}{}
+\emptyCircle{4.63}{8.72}{0.045} \fillableCheck{4.63}{8.72}{slot_exp9_1}{0}
+
+% --- Spells Table (40 rows) ---
+\renewcommand{\fillableFontSize}{7pt}
+\drawThickBox{0.30}{0.30}{4.80}{8.20}
+\fieldLabel{2.70}{8.38}{Cantrips \& Prepared Spells}
+
+
+% Column headers
+\node[font=\sheetfont\tiny, anchor=west] at (0.33, 8.20) {Prep};
+\node[font=\sheetfont\tiny, anchor=west] at (0.52, 8.20) {Lvl};
+\node[font=\sheetfont\tiny, anchor=west] at (0.75, 8.20) {Spell Name};
+\node[font=\sheetfont\tiny, anchor=west] at (2.25, 8.20) {C.Time};
+\node[font=\sheetfont\tiny, anchor=west] at (2.75, 8.20) {Range};
+\node[font=\sheetfont\tiny, anchor=west] at (3.25, 8.20) {Duration};
+\node[font=\sheetfont\tiny, anchor=center] at (3.90, 8.20) {C};
+\node[font=\sheetfont\tiny, anchor=center] at (4.05, 8.20) {R};
+\node[font=\sheetfont\tiny, anchor=west] at (4.20, 8.20) {Components \& Notes};
+
+\newcommand{\spellRowFillable}[8]{%
+    % #1 = y, #2 = idx, #3 = prep, #4 = lvl, #5 = name, #6 = time, #7 = range, #8 = dur
+    \emptyCircle{0.38}{#1+0.07}{0.045}%
+    \fillableCheck{0.38}{#1+0.07}{spell_prep_#2}{#3}%
+    
+    \inputField{0.52}{#1}{0.18}%
+    \fillableTextCenter{0.52}{#1+0.01}{0.18}{8pt}{spell_lvl_#2}{#4}%
+    
+    \inputField{0.75}{#1}{1.45}%
+    \fillableText{0.75}{#1+0.01}{1.45}{8pt}{spell_name_#2}{#5}%
+    
+    \inputField{2.25}{#1}{0.45}%
+    \fillableTextCenter{2.25}{#1+0.01}{0.45}{8pt}{spell_time_#2}{#6}%
+    
+    \inputField{2.75}{#1}{0.45}%
+    \fillableTextCenter{2.75}{#1+0.01}{0.45}{8pt}{spell_range_#2}{#7}%
+    
+    \inputField{3.25}{#1}{0.55}%
+    \fillableTextCenter{3.25}{#1+0.01}{0.55}{8pt}{spell_dur_#2}{#8}%
+}
+
+% Prepared spells list
+\spellRowFillable{7.90}{1}{1}{1}{Bless}{1 Act}{30 ft}{1 min}
+\emptyDiamond{3.90}{7.97}{0.035} \fillableCheck{3.90}{7.97}{spell_c_1}{1}
+\emptyDiamond{4.05}{7.97}{0.035} \fillableCheck{4.05}{7.97}{spell_r_1}{0}
+\inputField{4.20}{7.90}{0.85} \fillableText{4.20}{7.91}{0.85}{8pt}{spell_notes_1}{V,S,M (PHB 222)}
+
+\spellRowFillable{7.71}{2}{1}{1}{Cure Wounds}{1 Act}{Touch}{Inst}
+\emptyDiamond{3.90}{7.78}{0.035} \fillableCheck{3.90}{7.78}{spell_c_2}{0}
+\emptyDiamond{4.05}{7.78}{0.035} \fillableCheck{4.05}{7.78}{spell_r_2}{0}
+\inputField{4.20}{7.71}{0.85} \fillableText{4.20}{7.72}{0.85}{8pt}{spell_notes_2}{V,S (PHB 229)}
+
+\spellRowFillable{7.52}{3}{1}{1}{Heroism}{1 Act}{Touch}{1 min}
+\emptyDiamond{3.90}{7.59}{0.035} \fillableCheck{3.90}{7.59}{spell_c_3}{1}
+\emptyDiamond{4.05}{7.59}{0.035} \fillableCheck{4.05}{7.59}{spell_r_3}{0}
+\inputField{4.20}{7.52}{0.85} \fillableText{4.20}{7.53}{0.85}{8pt}{spell_notes_3}{V,S (PHB 250)}
+
+\spellRowFillable{7.33}{4}{1}{1}{Thunderous Smite}{1 B.Act}{Self}{1 min}
+\emptyDiamond{3.90}{7.40}{0.035} \fillableCheck{3.90}{7.40}{spell_c_4}{1}
+\emptyDiamond{4.05}{7.40}{0.035} \fillableCheck{4.05}{7.40}{spell_r_4}{0}
+\inputField{4.20}{7.33}{0.85} \fillableText{4.20}{7.34}{0.85}{8pt}{spell_notes_4}{V (PHB 282)}
+
+\spellRowFillable{7.14}{5}{1}{1}{Wrathful Smite}{1 B.Act}{Self}{1 min}
+\emptyDiamond{3.90}{7.21}{0.035} \fillableCheck{3.90}{7.21}{spell_c_5}{1}
+\emptyDiamond{4.05}{7.21}{0.035} \fillableCheck{4.05}{7.21}{spell_r_5}{0}
+\inputField{4.20}{7.14}{0.85} \fillableText{4.20}{7.15}{0.85}{8pt}{spell_notes_5}{V (PHB 289)}
+
+\spellRowFillable{6.95}{6}{1}{1}{Shield of Faith}{1 B.Act}{60 ft}{10 min}
+\emptyDiamond{3.90}{7.02}{0.035} \fillableCheck{3.90}{7.02}{spell_c_6}{1}
+\emptyDiamond{4.05}{7.02}{0.035} \fillableCheck{4.05}{7.02}{spell_r_6}{0}
+\inputField{4.20}{6.95}{0.85} \fillableText{4.20}{6.96}{0.85}{8pt}{spell_notes_6}{V,S,M (PHB 275)}
+
+\spellRowFillable{6.76}{7}{1}{1}{Protection from Ev/Gd}{1 Act}{Touch}{10 min}
+\emptyDiamond{3.90}{6.83}{0.035} \fillableCheck{3.90}{6.83}{spell_c_7}{1}
+\emptyDiamond{4.05}{6.83}{0.035} \fillableCheck{4.05}{6.83}{spell_r_7}{0}
+\inputField{4.20}{6.76}{0.85} \fillableText{4.20}{6.77}{0.85}{8pt}{spell_notes_7}{V,S,M (PHB 270)}
+
+\spellRowFillable{6.57}{8}{1}{2}{Aid}{1 Act}{30 ft}{8 hrs}
+\emptyDiamond{3.90}{6.64}{0.035} \fillableCheck{3.90}{6.64}{spell_c_8}{0}
+\emptyDiamond{4.05}{6.64}{0.035} \fillableCheck{4.05}{6.64}{spell_r_8}{0}
+\inputField{4.20}{6.57}{0.85} \fillableText{4.20}{6.58}{0.85}{8pt}{spell_notes_8}{V,S,M (PHB 211)}
+
+\spellRowFillable{6.38}{9}{1}{2}{Zone of Truth}{1 Act}{60 ft}{10 min}
+\emptyDiamond{3.90}{6.45}{0.035} \fillableCheck{3.90}{6.45}{spell_c_9}{0}
+\emptyDiamond{4.05}{6.45}{0.035} \fillableCheck{4.05}{6.45}{spell_r_9}{0}
+\inputField{4.20}{6.38}{0.85} \fillableText{4.20}{6.39}{0.85}{8pt}{spell_notes_9}{V,S (PHB 289)}
+
+\spellRowFillable{6.19}{10}{1}{2}{Find Steed}{1 Act}{30 ft}{Inst}
+\emptyDiamond{3.90}{6.26}{0.035} \fillableCheck{3.90}{6.26}{spell_c_10}{0}
+\emptyDiamond{4.05}{6.26}{0.035} \fillableCheck{4.05}{6.26}{spell_r_10}{0}
+\inputField{4.20}{6.19}{0.85} \fillableText{4.20}{6.20}{0.85}{8pt}{spell_notes_10}{V,S (PHB 240)}
+
+\spellRowFillable{6.00}{11}{1}{2}{Lesser Restoration}{1 Act}{Touch}{Inst}
+\emptyDiamond{3.90}{6.07}{0.035} \fillableCheck{3.90}{6.07}{spell_c_11}{0}
+\emptyDiamond{4.05}{6.07}{0.035} \fillableCheck{4.05}{6.07}{spell_r_11}{0}
+\inputField{4.20}{6.00}{0.85} \fillableText{4.20}{6.01}{0.85}{8pt}{spell_notes_11}{V,S (PHB 254)}
+
+\spellRowFillable{5.81}{12}{1}{2}{Locate Object}{1 Act}{Self}{10 min}
+\emptyDiamond{3.90}{5.88}{0.035} \fillableCheck{3.90}{5.88}{spell_c_12}{1}
+\emptyDiamond{4.05}{5.88}{0.035} \fillableCheck{4.05}{5.88}{spell_r_12}{0}
+\inputField{4.20}{5.81}{0.85} \fillableText{4.20}{5.82}{0.85}{8pt}{spell_notes_12}{V,S,M (PHB 256)}
+
+\spellRowFillable{5.62}{13}{1}{1}{Divine Smite}{1 B.Act}{Self}{Inst}
+\emptyDiamond{3.90}{5.69}{0.035} \fillableCheck{3.90}{5.69}{spell_c_13}{0}
+\emptyDiamond{4.05}{5.69}{0.035} \fillableCheck{4.05}{5.69}{spell_r_13}{0}
+\inputField{4.20}{5.62}{0.85} \fillableText{4.20}{5.63}{0.85}{8pt}{spell_notes_13}{V (PHB 233)}
+
+% Remaining empty rows (14 to 40)
+\foreach \ri [count=\rii from 14] in {5.43, 5.24, 5.05, 4.86, 4.67, 4.48, 4.29, 4.10, 3.91, 3.72, 3.53, 3.34, 3.15, 2.96, 2.77, 2.58, 2.39, 2.20, 2.01, 1.82, 1.63, 1.44, 1.25, 1.06, 0.87, 0.68, 0.49, 0.30} {
+    \emptyCircle{0.38}{\ri+0.07}{0.045}%
+    \fillableCheck{0.38}{\ri+0.07}{spell_prep_\rii}{0}%
+    \inputField{0.52}{\ri}{0.18}%
+    \fillableTextCenter{0.52}{\ri+0.01}{0.18}{8pt}{spell_lvl_\rii}{}%
+    \inputField{0.75}{\ri}{1.45}%
+    \fillableText{0.75}{\ri+0.01}{1.45}{8pt}{spell_name_\rii}{}%
+    \inputField{2.25}{\ri}{0.45}%
+    \fillableTextCenter{2.25}{\ri+0.01}{0.45}{8pt}{spell_time_\rii}{}%
+    \inputField{2.75}{\ri}{0.45}%
+    \fillableTextCenter{2.75}{\ri+0.01}{0.45}{8pt}{spell_range_\rii}{}%
+    \inputField{3.25}{\ri}{0.55}%
+    \fillableTextCenter{3.25}{\ri+0.01}{0.55}{8pt}{spell_dur_\rii}{}%
+    \emptyDiamond{3.90}{\ri+0.07}{0.035} \fillableCheck{3.90}{\ri+0.07}{spell_c_\rii}{0}%
+    \emptyDiamond{4.05}{\ri+0.07}{0.035} \fillableCheck{4.05}{\ri+0.07}{spell_r_\rii}{0}%
+    \inputField{4.20}{\ri}{0.85}%
+    \fillableText{4.20}{\ri+0.01}{0.85}{8pt}{spell_notes_\rii}{}%
+}
+\renewcommand{\fillableFontSize}{8pt}
+
+
+% ============================================================
+%  RIGHT COLUMN: INVENTORY & NARRATIVE (Aligned)
+% ============================================================
+
+% --- BACKSTORY ---
+\drawThickBox{5.20}{6.80}{3.02}{2.80}
+\fieldLabel{6.71}{9.48}{Backstory}
+\fillableTextMultiline{5.26}{6.85}{2.90}{2.45}{backstory}{\CharBackstory}
+
+% --- PERSONALITY, SPEECH, & BEHAVIOR ---
+\drawThickBox{5.20}{4.20}{3.02}{2.50}
+\fieldLabel{6.71}{6.58}{Personality, Speech \& Behavior}
+\fillableTextMultiline{5.26}{4.25}{2.90}{2.15}{personality}{\CharPersonality}
+
+% --- SPLIT MIDDLE/BOTTOM ROW ---
+% Left sub-column: Languages & Coins (x = 5.20 to 6.66)
+% Right sub-column: Equipment & Magic Items (x = 6.76 to 8.22)
+
+% --- LANGUAGES ---
+\drawThickBox{5.20}{2.90}{1.46}{1.20}
+\fieldLabel{5.93}{3.98}{Languages}
+\fillableTextMultiline{5.25}{2.95}{1.36}{0.85}{languages}{\CharLanguages}
+
+% --- COINS ---
+\drawThickBox{5.20}{0.30}{1.46}{2.50}
+\fieldLabel{5.93}{2.68}{Coins}
+
+\node[font=\sheetfont\tiny\bfseries] at (5.40, 2.30) {CP};
+\inputField{5.65}{2.25}{0.90}
+\fillableTextCenter{5.65}{2.27}{0.90}{10pt}{coin_cp}{0}
+
+\node[font=\sheetfont\tiny\bfseries] at (5.40, 1.80) {SP};
+\inputField{5.65}{1.75}{0.90}
+\fillableTextCenter{5.65}{1.77}{0.90}{10pt}{coin_sp}{0}
+
+\node[font=\sheetfont\tiny\bfseries] at (5.40, 1.30) {EP};
+\inputField{5.65}{1.25}{0.90}
+\fillableTextCenter{5.65}{1.27}{0.90}{10pt}{coin_ep}{0}
+
+\node[font=\sheetfont\tiny\bfseries] at (5.40, 0.80) {GP};
+\inputField{5.65}{0.75}{0.90}
+\fillableTextCenter{5.65}{0.77}{0.90}{10pt}{coin_gp}{15}
+
+\node[font=\sheetfont\tiny\bfseries] at (5.40, 0.38) {PP};
+\inputField{5.65}{0.33}{0.90}
+\fillableTextCenter{5.65}{0.35}{0.90}{10pt}{coin_pp}{0}
+
+% --- EQUIPMENT ---
+\drawThickBox{6.76}{1.60}{1.46}{2.50}
+\fieldLabel{7.49}{3.98}{Equipment}
+\fillableTextMultiline{6.81}{1.65}{1.36}{2.15}{equipment}{\CharEquipment}
+
+% --- MAGIC ITEM ATTUNEMENT ---
+\drawThickBox{6.76}{0.30}{1.46}{1.20}
+\fieldLabel{7.49}{1.38}{Attuned Items}
+
+\emptyDiamond{6.88}{1.21}{0.04}
+\fillableCheck{6.88}{1.21}{attune1}{1}
+\inputField{7.00}{1.13}{1.12}
+\fillableText{7.00}{1.15}{1.12}{8pt}{attune_item1}{Cloak of Prot.}
+
+\emptyDiamond{6.88}{0.88}{0.04}
+\fillableCheck{6.88}{0.88}{attune2}{0}
+\inputField{7.00}{0.80}{1.12}
+\fillableText{7.00}{0.82}{1.12}{8pt}{attune_item2}{}
+
+\emptyDiamond{6.88}{0.55}{0.04}
+\fillableCheck{6.88}{0.55}{attune3}{0}
+\inputField{7.00}{0.47}{1.12}
+\fillableText{7.00}{0.49}{1.12}{8pt}{attune_item3}{}
+
+% --- Footer ---
+\node[font=\sheetfont\tiny, text=sheetgray, anchor=south east]
+    at (8.20, 0.25) {TM \& \copyright{} 2024 Wizards of the Coast LLC.};
+
+
+\end{tikzpicture}
+
+\end{Form}
+\end{document}
+

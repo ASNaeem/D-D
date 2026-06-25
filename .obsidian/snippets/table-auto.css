@@ -1,0 +1,24 @@
+/* 1. Center the entire note container on your screen */
+.markdown-source-view .cm-sizer, 
+.markdown-rendered .markdown-preview-sizer {
+    max-width: 1000px !important; /* Sets a wide, comfortable page width */
+    margin: 0 auto !important;    /* Centers the whole page on your monitor */
+}
+
+/* 2. Prevent text from wrapping inside the table cells */
+.markdown-rendered td, 
+.markdown-rendered th,
+.cm-table-widget td, 
+.cm-table-widget th {
+    white-space: nowrap !important;
+}
+
+/* 3. Force all tables to stretch to the full width of the container */
+.markdown-rendered table,
+.markdown-source-view.mod-cm6 .cm-table-widget table,
+.markdown-source-view.mod-cm6 .cm-table-widget {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
