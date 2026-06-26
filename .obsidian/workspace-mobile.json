@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Campaigns/OneShot-26/Character_Sheet.md",
+                "file": "Spells/Spell_Find Steed.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Character_Sheet"
+              "title": "Spell_Find Steed"
             }
           }
         ]
@@ -112,7 +112,7 @@
         "state": {
           "type": "backlink",
           "state": {
-            "file": "Campaigns/OneShot-26/Character_Sheet.md",
+            "file": "Spells/Spell_Find Steed.md",
             "collapseAll": false,
             "extraContext": false,
             "sortOrder": "alphabetical",
@@ -172,8 +172,8 @@
   },
   "active": "ae1865efc314274f",
   "lastOpenFiles": [
-    "Backgrounds/Custom/Background_Planar Envoy.md",
     "Campaigns/OneShot-26/Character_Sheet.md",
+    "Backgrounds/Custom/Background_Planar Envoy.md",
     "Spells/Spell_Thunderous Smite.md",
     "Spells/Spell_Wrathful Smite.md",
     "Spells/Spell_Locate Object.md",
