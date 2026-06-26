@@ -11,10 +11,14 @@
             "id": "ae1865efc314274f",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Campaigns/OneShot-26/Character_Sheet.md",
+                "mode": "preview",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Character_Sheet"
             }
           }
         ]
@@ -108,6 +112,7 @@
         "state": {
           "type": "backlink",
           "state": {
+            "file": "Campaigns/OneShot-26/Character_Sheet.md",
             "collapseAll": false,
             "extraContext": false,
             "sortOrder": "alphabetical",
@@ -126,6 +131,7 @@
         "state": {
           "type": "outgoing-link",
           "state": {
+            "file": "Campaigns/OneShot-26/Character_Sheet.md",
             "linksCollapsed": false,
             "unlinkedCollapsed": true
           },
@@ -139,6 +145,7 @@
         "state": {
           "type": "outline",
           "state": {
+            "file": "Campaigns/OneShot-26/Character_Sheet.md",
             "followCursor": false,
             "showSearch": false,
             "searchQuery": ""
@@ -158,7 +165,9 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
+      "table-formatter:Format tables in active file": false
     }
   },
   "active": "ae1865efc314274f",
