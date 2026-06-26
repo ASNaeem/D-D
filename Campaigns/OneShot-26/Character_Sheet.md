@@ -101,7 +101,7 @@ slot_2_2: true
 *Note: With **Sacred Weapon** active, add your Charisma modifier to attack rolls with your melee weapon (Total: +**`VIEW[floor(({base_str} + {str_bonus} - 10) / 2) + {prof_bonus} + floor(({base_cha} + {cha_bonus} - 10) / 2)]`** to hit).*
 
 ---
-
+[]
 <a id="combat-actions"></a>
 ## 🔄 Combat Turn Actions (D&D 2024 Cheat Sheet)
 On your turn in combat, you can take **one Action**, **one Bonus Action** (if available), **move up to your Speed**, and perform minor interactions. You can also take **one Reaction** per round in response to triggers.
